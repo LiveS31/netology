@@ -37,9 +37,9 @@ class Student:
     def __str__(self):
         res = f"Имя:{self.name}\n"\
         f"Фамилия: {self.surname}\n"\
-        f"Средняя оценка за домашние задания: {self.average_rating}\n"\
+        f"Средняя оценка за домашние задания: {self.average_rating}\n"
         f'курсы в процуссе изуцения: {", ".join(self.courses_in_progress)}\n'\
-        f"Завершенные курсы: {''.join(self.finished_courses)}"
+        f"Завершенные курсы: {', '.join(self.finished_courses)}"
         return res
 
 #создание класса mentor
