@@ -20,7 +20,7 @@ print (max(intelligence))# выводим героя с максимальным
 #2
 current = os.getcwd()
 folder = "http_requests"
-files= 'file.txt'
+files= '1file.txt'
 file = (os.path.abspath(files))
 class YaUploader:
     host = 'https://cloud-api.yandex.net/v1/disk/resources/upload'
