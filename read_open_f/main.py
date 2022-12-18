@@ -14,9 +14,9 @@ with open('recipes.txt') as f: #чтение из файла
         f.readline()
         cook_book[name_food] = ing_food
 
-with open('menu.txt','w') as a: #запись в фаил
-    a.write (str(cook_book))
-print(cook_book)
+# with open('menu.txt','w') as a: #запись в фаил
+#     a.write (str(cook_book))
+# print(cook_book)
 
 #функция выбора блюд
 def get_shop_list_by_dishes(dishes, person_count): # создаем функцию
@@ -73,3 +73,4 @@ def file_txt(txt1, txt2, txt3):
     print ('Внесение изменения в файл: total.txt')
 file_txt('1.txt', '2.txt', '3.txt')
 
+#решение задачи 3 от преподователя
