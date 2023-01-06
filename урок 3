@@ -1,0 +1,181 @@
+ 
+import time
+print("\n==========\nСкорость поиска в списке и множестве из {n} элементов\n==========")
+
+# функция, сравнивающая два списка
+def fn1(x, y):
+	start = time.time()
+	z = []
+	for x1 in x:
+		for y1 in y:
+			if x1 == y1:
+				z.append(y1)
+	print(f"{time.time() - start} cек")
+	print(f"Сравнение списков. Совпало элементов: {len(z)}")
+
+# функция, сравнивающая два множества
+def fn2(x, y):
+	start = time.time()
+	z = x & y
+	print(f"{time.time() - start} сек")
+	print(f"Сравнение множеств. Совпало элементов: {len(z)}")
+
+# в каждом списке у нас по 10 тыс элементов
+n = 10_000
+xl = list(range(1,n))
+yl = list(range(1,n))
+
+# выводим первые 10 элементов и сравниваем списки
+print(xl[:10])
+print(yl[:10])
+fn1(xl, yl)
+
+# будет ли работать дольше, если развернуть второй список?
+yl.reverse()
+# выводим первые 10 элементов и сравниваем списки еще раз
+print(xl[:10])
+print(yl[:10])
+fn1(xl, yl)
+
+# выводим первые 10 элементов и сравниваем множества
+print(xl[:10])
+print(yl[:10])
+xs = set(xl)
+ys = set(yl)
+fn2(xs, ys)
+
+
+# capitals_dict = {"Russia":"Moscow", "France":"Paris"}
+
+# capitals_dict.setdefault("Britain", "London")
+# capitals_dict.setdefault("Britain", "London2")
+
+# if "Britain" not in capitals_dict.keys():
+# 	capitals_dict["Britain"] = "London"
+
+
+# print(capitals_dict)
+
+# cities_dict = {"Russia":["Moscow", "Spb"], "France":["Paris"]}
+# cities = ["city1", "city2", "city3"]
+# for city in cities:
+# 	# cities_dict.setdefault("some country", [])
+# 	if "some country" not in cities_dict.keys():
+# 		cities_dict["some country"] = []
+# 	cities_dict["some country"].append(city)
+# 	print(cities_dict)
+
+
+
+# print(capitals_dict["France"])
+
+# for country in capitals_dict:
+# 	value = capitals_dict[country]
+# 	print(country, value)
+
+# for country, city in capitals_dict.items():
+# 	print(country, city)
+
+# print(capitals_dict.values())
+# print(list(capitals_dict.values()))
+
+# print(capitals_dict.keys())
+# print(list(capitals_dict.keys()))
+
+# print(capitals_dict["France"])
+
+# if "Britain" in capitals_dict.keys():
+# 	print(capitals_dict["Britain"])
+# else:
+# 	print("Britain is not in dictionary")
+
+# print(capitals_dict.get("Britain"))
+
+
+# название - str
+# преподаватели - []
+
+java_dict = {"title":"Java-разработчик с нуля",
+						"mentors":["Павел Дерендяев", "Алексей Яковлев", "Дмитрий Гордин", "Сергей Сердюк", "Анатолий Корсаков", "Вадим Ерошевичев", "Алексей Фомичев", "Филипп Воронов"]}
+
+frontend_dict = {"title": "Frontend-разработчик с нуля",
+								 "mentors":["Ильназ Гильязов", "Татьяна Тен", "Александр Фитискин", "Александр Шлейко", "Алёна Батицкая", "Александр Беспоясов", "Денис Ежков", "Николай Лопин", "Михаил Ларченко", "Владимир Чебукин", "Эдгар Нуруллин", "Евгений Шек", "Валерий Хаслер"]}
+
+web_dict = {"title": "Web-разработчик с нуля",
+					 "mentors":["Николай Лопин", "Алёна Батицкая", "Алексей Дацков", "Александр Беспоясов", "Евгений Корытов", "Алексей Кулагин", "Ильназ Гильязов", "Владимир Языков", "Владимир Чебукин", "Эдгар Нуруллин", "Александр Дудинский"]}
+
+java_set = set(java_dict["mentors"])
+frontend_set = set(frontend_dict["mentors"])
+web_set = set(web_dict["mentors"])
+
+# print(java_set | frontend_set | web_set)
+# print(len(java_set | frontend_set | web_set))
+
+# all_list = java_dict["mentors"] + frontend_dict["mentors"] + web_dict["mentors"]
+# print(all_list)
+# print(len(all_list))
+
+# print("f - w")
+# print(frontend_set - web_set)
+# print("w - f")
+# print(web_set - frontend_set)
+# print("f ^ w")
+# print(frontend_set ^ web_set)
+# print("w ^ f")
+# print(web_set ^ frontend_set)
+
+union = frontend_set | web_set | java_set
+union = frontend_set.union(web_set, java_set)
+# print(union)
+union = set()
+union |= frontend_set | web_set | java_set
+
+# print(frontend_set)
+# print()
+# frontend_set.update(web_set, java_set)
+# print(frontend_set)
+
+
+# intersect = frontend_set & web_set & java_set
+# intersect = frontend_set.intersection(web_set, java_set)
+
+# substract1 = frontend_set.difference(web_set, java_set)
+# substract2 = web_set.difference(frontend_set, java_set)
+# print(substract1)
+# print(substract2)
+
+# symm = frontend_set.symmetric_difference(web_set)
+# symm ^= web_set
+# print(symm)
+
+# if len(frontend_set & web_set & java_set):
+# 	print("Пустое множество")
+# print(len(frontend_set & web_set))
+
+#  как сравнить множества попарно
+# set_list = [java_set, frontend_set, web_set]
+# for i in range(len(set_list)):
+# 	for j in range(len(set_list)):
+# 		if i != j:
+# 			print(set_list[i] & set_list[j])
+
+courses_list = [java_dict, frontend_dict, web_dict]
+
+max_count = 0
+max_course_id = None
+for id, course in enumerate(courses_list):
+	mentors_count = len(course["mentors"])
+	if mentors_count > max_count:
+		max_count = mentors_count
+		max_course_id = id
+	# print(f"На курсе {course['title']} {mentors_count} преподавателей")
+
+# print(f'Самый крутой курс {courses_list[max_course_id]["title"]}, потому что на нем {max_count} преподавателей')
+
+# print(f"Самое большое количество преподавателей {max_count}")
+
+# print("Самое большое количество", max_count)
+# print("Самое большое количество {}".format(max_count))
+# s = "Самое большое количество {} {}".format(max_count, frontend_dict["title"])
+# print(s)
+# print(f"Самое большое количество {max_count}")

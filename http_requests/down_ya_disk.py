@@ -1,4 +1,4 @@
-#получене данных от сайта
+ #получене данных от сайта
 import requests
 # url = 'http://google.com'
 #

@@ -1,0 +1,51 @@
+documents = [
+    {"type": "passport", "number": "2207 876234", "name": "Василий Гупкин"},
+    {"type": "invoice", "number": "11-2", "name": "Геннадий Покемонов"},
+    {"type": "insurance", "number": "10006", "name": "Аристарх Павлов"}
+]
+directories = {
+    '1': ['2207 876234', '11-2'],
+    '2': ['10006'],
+    '3': []
+}
+
+def inf_docs(): #P
+    name_id = input('Введите номер документа:')
+    for i in range(len(documents)):
+        for id, num in documents[i].items():
+            if name_id == num: return f"Документ {name_id} принадлежит: {documents[i]['name']}"
+    return "Документ отсутствует!!!"
+
+def shelf_docs(): #S+
+    name_id = input('Введите номер документа:')
+    for num, shelf in directories.items():
+        if name_id in shelf: return f"Документ {name_id} находится на полке: {num}"
+
+def list_doc():#L
+    for i in range(len(documents)):
+        for val in documents[i].values(): print (val, end=' ')
+        print()
+    return ''
+
+def add_docs(): #A+
+    dic_type = input('Введите тип документа:')
+    dic_num = input('Введите свой номер:')
+    dic_name = input('Введите свое имя:')
+    dic_direckt = input('Введите номер полки от 1 до 3:')
+    if dic_direckt not in directories:
+        return 'Номер полки введен не верно!!!'
+    else:
+        doct = {'type': dic_type, 'numder': dic_num, 'name': dic_name}
+        documents.append(doct)
+        directories[dic_direckt].append(dic_num)
+        return 'Данные успешно добавлены!'
+
+
+while True:
+    print('Доступные команды:', 'p - people, s - shelf, l- list, a- add, m – move, as – add shelf', sep='\n')
+    parameter = input("Выберите параметр:").lower()
+    if parameter == 'q': break
+    elif parameter == 'a': print (add_docs())
+    elif parameter == 'p': print (inf_docs())
+    elif parameter == 's': print (shelf_docs())
+    elif parameter == 'l': print (list_doc())
