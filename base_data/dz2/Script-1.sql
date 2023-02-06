@@ -4,27 +4,27 @@ create table if not exists compilacion(
 	year_output INTEGER
 );
 
-create table if not exists album (
+create table if not exists albums(
 	id INTEGER primary key,
 	id_album INTEGER,
 	album TEXT,
 	year_output INTEGER
 	);
 
-create table if not exists executors (
+create table if not exists executors(
 	id integer primary key,
 	id_executors INTEGER,
 	executors TEXT
 );
 
-create table if not exists title (
+create table if not exists title(
 	id INTEGER primary key,
 	genre TEXT
 );
 
-create table if not exists song (
+create table if not exists song(
 	id INTEGER primary key,
-	id_song INTEGER not null references album(id),
+	id_song INTEGER not null references albums(id),
 	song VARCHAR(60),
 	track_time FLOAT
 );
@@ -36,7 +36,7 @@ create table if not exists song_compilacion(
 );
 
 create  table if not exists albub_executors (
-	id_album INTEGER not null references album(id),
+	id_album INTEGER not null references albums(id),
 	id_executors integer not null references executors(id),
 	constraint fk primary key (id_album, id_executors)
 );
@@ -46,3 +46,6 @@ create  table  if not exists title_executors(
 	id_executors integer not null references executors (id),
 	constraint pk primary key (id_genres, id_executors)
 );
+
+-- Здравствуйте. подскажите почему если я оставляю album то он пишет вверху ID= 3
+-- и не дает добовлять туда данные
