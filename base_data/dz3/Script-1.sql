@@ -12,18 +12,18 @@ create table if not exists albums(
 	year_output INTEGER
 );
 
-create table if not exists executors (
+create table if not exists executors(
 	id  INTEGER primary key, 
 	id_executors INTEGER not null, 
 	executors VARCHAR(60)
 );
 
-create table if not exists title ( 
+create table if not exists title(
 	id  INTEGER primary key, 
 	genre VARCHAR(60) not null
 );
 
-create table if not exists song (
+create table if not exists song(
 	id INTEGER primary key,
 	id_song INTEGER not null references albums(id),
 	song VARCHAR(60),
@@ -43,8 +43,8 @@ create  table if not exists albub_executors (
 );
 
 create  table  if not exists title_executors(
-	id_genres integer not null references title (id),
-	id_executors integer not null references executors (id),
+	id_genres integer not null references title(id),
+	id_executors integer not null references executors(id),
 	constraint pk primary key (id_genres, id_executors)
 );
 
