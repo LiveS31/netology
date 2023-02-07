@@ -116,7 +116,7 @@ VALUES(21, 11, 'GUSLI', '2017');
 INSERT INTO albums(id, id_album, album, year_output)
 VALUES(22, 11, 'Вид на жизнь', '2022');
 
--- Добовка треков
+-- Добавка треков
 INSERT INTO song(id, id_song, song, track_time)
 VALUES(1, 1, 'Dear Friends', '1.09');
 
