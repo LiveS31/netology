@@ -1,3 +1,4 @@
+-- Ok
 -- выботка по году
 SELECT album, year_output FROM albums
 WHERE year_output = 2018;
@@ -11,23 +12,18 @@ limit 1;
 SELECT song , track_time FROM song
 WHERE track_time < 3.5;
 
--- Сборники 2018 - 2020 ?????
--- Непонял как сделать, и помощь в чате молчит.....
-
-SELECT  year_output
-FROM albub_executors 
+-- Сборники 2018 - 2020 
+SELECT names, year_output FROM compilacion 
 WHERE year_output >= 2003 and year_output <= 2018 ;
-
-
 
 --исполнители, чье имя состоит из 1 слова
 SELECT executors from executors 
 WHERE executors not like '% %';
 
 -- название треков, которые содержат слово "мой"/"my"
-select song  from song
+SELECT song  from song
 WHERE song like '%my%';
 
-select song  from song
+SELECT song  from song
 WHERE song like '%мой%';
 
