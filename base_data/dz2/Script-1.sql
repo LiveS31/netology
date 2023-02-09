@@ -2,13 +2,13 @@
 -- Создание таблиц
 create table if not exists compilacion(
 	id_compilacion  INTEGER primary key,
-	names VARCHAR(60),
+	names TEXT,
 	year_output INTEGER
 );
 
 create table if not exists albums(
 	id  INTEGER primary key,
-	album VARCHAR(60) not null,
+	album TEXT not null,
 	year_output INTEGER
 );
 
@@ -19,14 +19,14 @@ create table if not exists executors (
 
 create table if not exists genre(
 	id  INTEGER primary key,
-	genre VARCHAR(60) not null
+	genre VARCHAR(50) not null
 );
 
 create table if not exists song(
 	id INTEGER primary key,
 	album_id INTEGER not null references albums(id),
 	album_id2 INTEGER references albums(id),
-	song VARCHAR(100),
+	song TEXT,
 	track_time FLOAT
 );
 
