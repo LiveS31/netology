@@ -2,7 +2,7 @@
 -- Создание таблиц
 create table if not exists compilacion(
 	id_compilacion  INTEGER primary key,
-	names TEXT,
+	names  text not null,
 	year_output INTEGER
 );
 
@@ -14,7 +14,7 @@ create table if not exists albums(
 
 create table if not exists executors (
 	id  INTEGER primary key,
-	executors VARCHAR(60)
+	executors text not null
 );
 
 create table if not exists genre(
