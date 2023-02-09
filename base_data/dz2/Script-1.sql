@@ -25,7 +25,7 @@ create table if not exists genre(
 create table if not exists song(
 	id INTEGER primary key,
 	album_id INTEGER not null references albums(id),
-	album_id2 INTEGER not null references albums(id),
+	album_id2 INTEGER references albums(id),
 	song VARCHAR(100),
 	track_time FLOAT
 );
