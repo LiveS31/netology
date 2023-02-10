@@ -13,12 +13,12 @@ SELECT song , track_time FROM song
 WHERE track_time < 3.5;
 
 -- Сборники 2018 - 2020 
-SELECT names, year_output FROM compilacion 
+SELECT names, year_output FROM compilation 
 WHERE year_output >= 2003 and year_output <= 2018 ;
 
 --исполнители, чье имя состоит из 1 слова
-SELECT executors from executors 
-WHERE executors not like '% %';
+SELECT name from executors 
+WHERE name not like '% %';
 
 -- название треков, которые содержат слово "мой"/"my"
 SELECT song  from song
