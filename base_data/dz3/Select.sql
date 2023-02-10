@@ -8,9 +8,10 @@ SELECT song , track_time FROM song
 ORDER BY track_time desc
 limit 1;
 
--- Менее 3,5 минут
-SELECT song , track_time FROM song
-WHERE track_time < 3.5;
+-- не менее 3,5 минуты;
+SELECT song  FROM song
+WHERE track_time >= (3.5*60);
+
 
 -- Сборники 2018 - 2020 
 SELECT names, year_output FROM compilation 
