@@ -4,7 +4,7 @@
 create table if not exists compilation(
 	id_compilation  SERIAL primary key,
 	names  text not null,
-	year_output INTEGER
+	year_output INTEGER not null
 );
 
 -- альбом
