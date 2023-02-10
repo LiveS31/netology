@@ -1,4 +1,4 @@
--- Ок вроде
+-- Ок
 -- заполнение жанр
 INSERT INTO genre(id, genre)
 VALUES(1, 'ROCK');

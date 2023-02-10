@@ -1,4 +1,4 @@
-- Ok
+-- Ok
 -- Создание таблиц
 -- Cборник
 create table if not exists compilation(
@@ -31,7 +31,7 @@ create table if not exists song(
 	id SERIAL primary key,
 	album_id INTEGER not null references albums(id),
 	song TEXT,
-	track_time FLOAT
+	track_time INTEGER not null
 );
 
 -- промежуточные таблицы
