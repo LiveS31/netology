@@ -2,29 +2,29 @@
 -- Создание таблиц
 -- сборник
 create table if not exists compilacion(
-	id_compilacion  INTEGER primary key,
+	id_compilacion  SERIAL primary key,
 	names  text not null,
 	year_output INTEGER
 );
 -- альбом
 create table if not exists albums(
-	id  INTEGER primary key,
+	id  SERIAL primary key,
 	album TEXT not null,
 	year_output INTEGER
 );
 -- исполнитель
 create table if not exists executors (
-	id  INTEGER primary key,
+	id  SERIAL primary key,
 	name text not null
 );
 -- жанр
 create table if not exists genre(
-	id  INTEGER primary key,
+	id  SERIAL primary key,
 	genre VARCHAR(50) not null
 );
 -- песня
 create table if not exists song(
-	id INTEGER primary key,
+	id SERIAL primary key,
 	album_id INTEGER not null references albums(id),
 	song TEXT,
 	track_time FLOAT
@@ -37,8 +37,8 @@ create table if not exists song_compilacion(
 );
 
 create  table if not exists album_executors (
-	id_album INTEGER not null references albums(id),
-	id_executors integer not null references executors(id),
+	id_album SERIAL not null references albums(id),
+	id_executors SERIAL not null references executors(id),
 	constraint fk primary key (id_album, id_executors)
 );
 
