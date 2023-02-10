@@ -11,7 +11,7 @@ create table if not exists compilation(
 create table if not exists albums(
 	id  SERIAL primary key,
 	album TEXT not null,
-	year_output INTEGER
+	year_output INTEGER not null
 );
 
 -- исполнитель
