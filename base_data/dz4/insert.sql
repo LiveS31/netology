@@ -17,37 +17,37 @@ VALUES(5, 'RAP');
 
 -- заполнение испотнители
 INSERT INTO executors(id, name)
-VALUES(1, 'Queen');
+VALUES(1,  'Queen');
 
 INSERT INTO executors(id, name)
-VALUES(2, 'Linkin Park');
+VALUES(2,  'Linkin Park');
 
 INSERT INTO executors(id, name)
-VALUES(3, 'Red Hot Chili Peppers');
+VALUES(3,  'Red Hot Chili Peppers');
 
 INSERT INTO executors(id, name)
-VALUES(4, 'Ariana Grande');
+VALUES(4,  'Ariana Grande');
 
 INSERT INTO executors(id, name)
-VALUES(5, 'Lady Gaga');
+VALUES(5,  'Lady Gaga');
 
 INSERT INTO executors(id, name)
-VALUES(6, 'Louis Armstrong');
+VALUES(6,  'Louis Armstrong');
 
 INSERT INTO executors(id, name)
-VALUES(7, 'Duke Ellington');
+VALUES(7,  'Duke Ellington');
 
 INSERT INTO executors(id, name)
-VALUES(8, 'Johann Sebastian Bach');
+VALUES(8,  'Johann Sebastian Bach');
 
 INSERT INTO executors(id, name)
 VALUES(9, 'Antonio Vivaldi');
 
 INSERT INTO executors(id, name)
-VALUES(10, 'Centr');
+VALUES(10,  'Centr');
 
 INSERT INTO executors(id, name)
-VALUES(11, 'Slim');
+VALUES(11,  'Slim');
 
 -- заполнение альбомов
 INSERT INTO albums(id, album, year_output)
@@ -277,3 +277,10 @@ VALUES(8, 'FAN bounce', 2023);
 
 INSERT INTO compilation(id_compilation, names, year_output)
 VALUES(9, 'Попса+', 2004);
+
+-- заполнение промежуточной таблицы
+insert into genre_executors
+	values (1,1),(1,2),(1,3),
+	(2,4),(2,5),(3,6),(3,7),
+	(4,8),(4,9),(5,10),(5,11);
+
