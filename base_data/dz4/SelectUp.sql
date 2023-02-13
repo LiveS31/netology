@@ -38,5 +38,15 @@ where e."name" = 'Antonio Vivaldi';
 
 -- 8.исполнителя(-ей), написавшего самый короткий по продолжительности трек 
 -- (теоретически таких треков может быть несколько);
+--8.исполнителя(-ей), написавшего самый короткий по продолжительности трек
+-- (теоретически таких треков может быть несколько);
+-- Выведено для удобства
+select  e."name", s."song",s.track_time   from song s
+join albums a on s.album_id  = a.id
+join album_executors ae on a.id = ae.id_album
+join executors e on ae.id_executors  = e.id
+WHERE s.track_time  < (SELECT MAX(s.track_time) FROM song s)
+ORDER BY s.track_time
+limit 1;
 
 -- 9.название альбомов, содержащих наименьшее количество треков.
