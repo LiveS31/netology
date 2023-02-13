@@ -15,6 +15,10 @@ join song s on a.id  = s.album_id
 group by a.id ;
 
 -- 4.все исполнители, которые не выпустили альбомы в 2020 году;
+select  e."name"  from albums a
+join album_executors ae on a.id = ae.id_album
+join executors e on ae.id_album = e.id
+where a.year_output != 2020;
 
 -- 5.названия сборников, в которых присутствует конкретный исполнитель 
 --(выберите сами);
