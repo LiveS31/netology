@@ -15,13 +15,22 @@ join song s on a.id  = s.album_id
 group by a.id ;
 
 -- 4.все исполнители, которые не выпустили альбомы в 2020 году;
-select  e."name"  from albums a
+-- год был выведен для наглядности
+select  e."name", a.year_output  from albums a
 join album_executors ae on a.id = ae.id_album
 join executors e on ae.id_album = e.id
 where a.year_output != 2020;
 
 -- 5.названия сборников, в которых присутствует конкретный исполнитель 
 --(выберите сами);
+-- названия сборников,
+--в которых присутствует конкретный исполнитель (выберите сами);
+select   c.names, e."name"  from compilation c
+join song_compilation sc on c.id_compilation = sc.id_compilation
+join song s on sc.id_song  = s.id
+join album_executors ae on s.id = ae.id_executors
+join executors e on ae.id_album = e.id
+where e."name" = 'Antonio Vivaldi';
 
 -- 6.название альбомов, в которых присутствуют исполнители более 1 жанра;
 
