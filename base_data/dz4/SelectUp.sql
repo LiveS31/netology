@@ -53,4 +53,4 @@ limit 1;
 SELECT  a.album , COUNT(*) FROM song s
 join albums a on s.album_id = a.id
 GROUP BY s.album_id , a.id
-HAVING COUNT(*) = (select sum(album_id));
+HAVING COUNT(*) != (select sum(album_id));
