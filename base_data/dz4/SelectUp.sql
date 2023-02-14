@@ -48,3 +48,9 @@ ORDER BY s.track_time
 limit 1;
 
 -- 9.название альбомов, содержащих наименьшее количество треков.
+-- в альбом была добавлена +1 композиция ( так как в альбомах было по 2 трека)
+-- выведено для удобства
+SELECT  a.album , COUNT(*) FROM song s
+join albums a on s.album_id = a.id
+GROUP BY s.album_id , a.id
+HAVING COUNT(*) = (select sum(album_id));
