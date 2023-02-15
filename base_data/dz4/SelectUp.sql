@@ -33,8 +33,14 @@ join executors e on ae.id_album = e.id
 where e."name" = 'Antonio Vivaldi';
 
 -- 6.название альбомов, в которых присутствуют исполнители более 1 жанра;
+SELECT a.album   FROM albums a
+JOIN album_executors ae on a.id = ae.id_album
+JOIN executors e ON ae.id_executors  = e.id
+JOIN genre_executors ge ON e.id = ge.id_executors
+JOIN genre g ON ge.id_genres  = g.id
+GROUP BY a.album, g.genre
+HAVING COUNT(g.id) > 1;
 
--- 7.наименование треков, которые не входят в сборники;
 -- 7.наименование треков, которые не входят в сборники;
 SELECT  s.id ,s.song  FROM song s
 left join song_compilation sc on sc.id_song  = s.id
