@@ -53,14 +53,19 @@ select  e."name", s."song",s.track_time   from song s
 join albums a on s.album_id  = a.id
 join album_executors ae on a.id = ae.id_album
 join executors e on ae.id_executors  = e.id
-WHERE s.track_time  < (SELECT MAX(s.track_time) FROM song s)
-ORDER BY s.track_time
-limit 1;
+WHERE s.track_time  = (SELECT MIN(s.track_time) FROM song s)
+ORDER BY s.track_time;
+
 
 -- 9.название альбомов, содержащих наименьшее количество треков.
 -- в альбом была добавлена +1 композиция ( так как в альбомах было по 2 трека)
 -- выведено для удобства
-SELECT  a.album , COUNT(*) FROM song s
+SELECT  a.album, COUNT(s.album_id)  FROM song s
 join albums a on s.album_id = a.id
-GROUP BY s.album_id , a.id
-HAVING COUNT(*) != (select sum(album_id));
+GROUP BY a.album
+HAVING COUNT(s.album_id) =
+(SELECT COUNT(s.album_id) FROM song s
+	JOIN albums a ON s.album_id = a.id
+	GROUP BY a.id
+	ORDER BY COUNT(s.album_id)
+	LIMIT 1);
