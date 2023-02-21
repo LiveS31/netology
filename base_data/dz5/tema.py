@@ -1,113 +1,148 @@
 import psycopg2
 
-with psycopg2.connect(database="", user="", password="") as conn:
-    with conn.cursor() as cur:
-        def new_table(cura):
-            cura.execute("""
-                DROP TABLE numbers;
-                DROP TABLE name_surname_email;
 
+
+def new_table():
+    cur.execute("""
+                
                 CREATE TABLE IF NOT EXISTS name_surname_email(
-                id SERIAL PRIMARY KEY not null,
+                id_client SERIAL PRIMARY KEY,
                 name VARCHAR,
                 surname VARCHAR,
                 email VARCHAR
                 );
 
                 CREATE TABLE IF NOT EXISTS numbers(
-                id SERIAL  PRIMARY KEY not null,
-                id_name INTEGER  REFERENCES name_surname_email(id),
-                number VARCHAR
+                id_phones SERIAL  PRIMARY KEY,
+                id_name INTEGER  REFERENCES name_surname_email(id_client),
+                number INTEGER
                 );
                 """)
+    print('Таблица создана!!!')
 
+    conn.commit()  # фиксируем в БД
 
-        conn.commit()  # фиксируем в БД
-
-        def new_client(id,  nam, surn, em, phon): # добавление нового клиента
-            cur.execute("""
-            INSERT INTO name_surname_email(name, surname, email) VALUES(%s, %s, %s);
+#удаление таблиц
+def del_table():
+    cur.execute("""
+    DROP TABLE numbers;
+    DROP TABLE name_surname_email;
+    """)
+def new_client(nam=None, surn=None, em=None, phon=None): # добавление нового клиента
+    cur.execute("""
+            INSERT INTO name_surname_email(name, surname, email) VALUES(%s, %s, %s)
+            RETURNING id_client, name, surname;
             """ ,(nam, surn, em))
-            cur.execute("""
-            INSERT INTO numbers(id_name, number) VALUES(%s, %s)
-            """, (id, phon))
+    id_client = cur.fetchone()
+    if phon is not None:
+        cur.execute("""
+            INSERT INTO numbers(id_name, number)
+            VALUES(%s, %s) RETURNING number;
+            """, (id_client[0], phon))
+        cur.fetchone()
+    print('Клиент', *id_client[1:], 'добавлен(-а) в таблицу.')
 
-        def add_nub(id, num):
-            cur.execute("""
-            INSERT INTO numbers(id_name, number) VALUES(%s, %s);
-            """, (id, num))
+#добовление номера
+def add_nub(id_client, num):
+    cur.execute("""
+            INSERT INTO numbers(id_name, number)
+            VALUES(%s, %s)
+            RETURNING id_name, numbers;
+            """, (id_client, num))
+    number = cur.fetchone()
+    print(f'Изменение номера клиента {number[0]} - выполнено')
 
-        def change_data(id, nam, surn, em): # Изменение данных о клиенте
-            cur.execute("""
-            UPDATE name_surname_email SET name = %s, surname =%s, email = %s WHERE id =%s;
-            """, ( nam, surn, em, id))
+# Изменение данных о клиенте
+def change_data(id, nam=None, surn=None, em=None, phon=None): # Изменение данных о клиенте
+    if nam is not None:
+        cur.execute("""
+        UPDATE name_surname_email SET name=%s WHERE id_client=%s;
+        """, (nam, id))
+    if surn is not None:
+        cur.execute("""
+        UPDATE name_surname_email SET surname=%s WHERE id_client=%s;
+        """,(surn, id))
+    if em is not None:
+        cur.execute("""
+        UPDATE name_surname_email SET email=%s WHERE id_client=%s;
+        """, (em, id))
+    if phon is not None:
+        cur.execute("""
+        UPDATE numbers SET number=%s WHERE id_name=%s;
+        """,(phon, id))
+    print(f'Данные клиента с id {id} изменены.')
 
-        def change_phone(id, phon): #изменения номера телефона
-            cur.execute("""
-            UPDATE numbers SET number = %s WHERE id = %s;
+ #изменения номера телефона
+def change_phone(id, phon): #изменения номера телефона
+    cur.execute("""
+            UPDATE numbers SET number = %s WHERE id_name = %s;
             """, ( phon, id))
-        def del_client(id):
-            cur.execute("""
+    print(f'Данные телефона клиента с id {id} изменены.')
+
+#Удалениея номера телефона клиента
+def del_pnones(id, phon):
+    cur.execute("""
+    DELETE FROM numbers WHERE id_name=%s AND number=%s;
+    """, (id, phon))
+
+
+#удаление клиента
+def del_client(id):
+    cur.execute("""
             DELETE FROM numbers WHERE id_name = %s;
             """,(id,))
-            cur.execute("""
-            DELETE FROM name_surname_email WHERE id = %s;
+    cur.execute("""
+            DELETE FROM name_surname_email WHERE id_client = %s;
             """,(id,))
-        def search(searcht):
-            cur.execute("""
-            SELECT * FROM name_surname_email WHERE surname = %s;
+    print(f'Клиент id {id} - удален')
+
+#поиск клиента
+def search(searcht):
+    cur.execute("""
+            SELECT * FROM name_surname_email AS nse
+            LEFT JOIN numbers AS n ON nse.id_client = n.id_name
+            WHERE nse.name LIKE %s;
             """, (searcht,))
-            print(cur.fetchone())
-            cur.execute("""
-            SELECT * FROM name_surname_email WHERE name = %s;
+    if cur.fetchone() is not None:
+        print(cur.fetchone()[0],cur.fetchone()[1],cur.fetchone()[2],cur.fetchone()[3],cur.fetchone()[6])
+        return
+    cur.execute("""
+            SELECT * FROM name_surname_email AS nse
+            LEFT JOIN numbers AS n ON nse.id_client = n.id_name
+            WHERE nse.surname LIKE %s;
             """, (searcht,))
-            print(cur.fetchone())
-            cur.execute("""
-            SELECT * FROM name_surname_email WHERE email = %s;
+    if cur.fetchone() is not None:
+        print(cur.fetchone()[0],cur.fetchone()[1],cur.fetchone()[2],cur.fetchone()[3],cur.fetchone()[6])
+    cur.execute("""
+            SELECT * FROM name_surname_email AS nse
+            LEFT JOIN numbers AS n ON nse.id_client = n.id_name
+            WHERE nse.email LIKE %s;
             """, (searcht,))
-            print(cur.fetchone())
-            cur.execute("""
-            SELECT * FROM numbers WHERE number = %s;
-               """, (searcht,))
-            print(cur.fetchone())
+    if cur.fetchone() is not None:
+        print(cur.fetchone()[0],cur.fetchone()[1],cur.fetchone()[2],cur.fetchone()[3],cur.fetchone()[6])
+    cur.execute("""
+            SELECT * FROM name_surname_email AS nse
+            LEFT JOIN numbers AS n ON nse.id_client = n.id_name 
+            WHERE n.number LIKE %s;
+            """, (searcht,))
+    if cur.fetchone() is not None:
+        print(cur.fetchone()[0],cur.fetchone()[1],cur.fetchone()[2],cur.fetchone()[3],cur.fetchone()[6])
 
 
 
-
-
+#запуск кода
+if __name__ == '__main__':
+    with psycopg2.connect(database="", user="", password="") as conn:
+        with conn.cursor() as cur:
 # запуск функциий
-        #new_table(cur) # создание таблиц
-        #new_client( 1,'lef', 'LLef', 'dsfsdf', 'fdhdfb') #заполнение таблиц
-        #add_nub(2,'34234') # Добавление номера существующего клиента
-        #change_data(1, 'gd1fg', 'susd111f1rn', 'ems2d12f') #изменение даннх клиента
-        #change_phone(1,'djn ') # изменение номера телефона
-        #del_client(1) #Функция, позволяющая удалить существующего клиента
-        search('dsfsdf')
+            #new_table() # создание таблиц
+            #del_table() # Удаление таблиц
+            #new_client( 'lef', 'LLef', 'dsfsdf', 45834534) #заполнение таблиц
+            #add_nub(1, 34234) # Добавление номера существующего клиента
+            #change_data(2, 'gd1fg', 'susd111f1rn', 'ems2d12f', 9943204) #изменение данных клиента
+            #change_phone(1, 46664564) # изменение номера телефона
+            #del_pnones(2,'9943204')# удаление номера телефона
+            #del_client(4) #Функция, позволяющая удалить существующего клиента
+            #search('45834534') #Поиск клиента
 
-
-
-#conn.commit()
-#table(cur)
-#def new_user(name): #, curn, emai,phone):
-# print(name)
-
-
-
-# while  True:
-#     print('Выберите действия:\n'
-#         '1 - создание таблиц\n'
-#         '2 - добавление нового клиента\n'
-#                   '3 - добавление номера телефона для нового клиента\n'
-#                   '4 - изменение данных нового клиента\n'
-#                   '5 - удаление телефона существующего клиента\n'
-#                   '6 - удалить клиента\n'
-#                   '7 - найти нового клиента')
-#     answ = input()
-#     if answ == '1':
-#         print("Таблица создана")
-#         new_table(cur)
-#    #  elif answ == '2':
-#      print ('hbdsgkdsgvk')
-#      table('12')
-# # answ = ''
 conn.close()
