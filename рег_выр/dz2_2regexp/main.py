@@ -7,17 +7,6 @@ with open("phonebook_raw.csv") as f:
   contacts_list = list(rows)
 #print(contacts_list) #info
 
-name_pattern_raw = r'^([А-ЯЁа-яё]+)(\s*)(\,?)([А-ЯЁа-яё]+)' \
-                       r'(\s*)(\,?)([А-ЯЁа-яё]*)(\,?)(\,?)(\,?)'
-name_pattern_new = r'\1\3\10\4\6\9\7\8'
-a = list()
-for card in contacts_list:
-    card_as_string = ','.join(card)
-    formatted_card = re.sub(name_pattern_raw, name_pattern_new, card_as_string)
-    card_as_list = formatted_card.split(',')
-    a.append(card_as_list)
-#pprint(a) #info
-
 # # TODO 1: выполните пункты 1-3 ДЗ
 # # ваш код
 name_list = r'^([А-ЯЁа-яё]+)(\s*)(\,?)([А-ЯЁа-яё]+)' \
@@ -54,9 +43,9 @@ for i in tabl_new: # запускаем цикл по списку
                 i[6] = j[6]
 contacts_list = list() # создаем цикл для заполнения
 for page in tabl_new: # делаем проход цикла, чтобы пройтись по нему
-    if page not in contacts_list: # создаем условие - если строки нет в списке - добавляем
+    if page[:7] not in contacts_list: # создаем условие - если строки нет в списке - добавляем
                                      # тем самым избавляемся от дубликатов
-        contacts_list.append(page) # добавляем по условию выше
+        contacts_list.append(page[:7]) # добавляем по условию выше
 
 # # TODO 2: сохраните получившиеся данные в другой файл
 # # код для записи файла в формате CSV
