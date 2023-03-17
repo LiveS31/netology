@@ -6,9 +6,9 @@ from pprint import pprint
 
 
 hh_url = 'https://spb.hh.ru/search/vacancy?text=python&area=1&area=2'
-link_vac = []
+
 zp = []
-list= []
+list = []
 mix_sort =[]
 vscan_t = []
 sort_list = []
@@ -18,6 +18,7 @@ def get_handres():
     return Headers(browser='firefox', os='win').generate()
 
 def link_on_page():
+    link_vac = []
     # сделано для того, чтобы что - то менялось(print)
     print("начата сортировка по линку с переходом на страницу вакансии с главной", end='')
     main_padge = requests.get(hh_url, headers=get_handres()).text
@@ -52,17 +53,17 @@ def zp_vac():
         zp_link_on = zp_link.find('span', class_="bloko-header-section-2 bloko-header-section-2_lite")
         zp.append(zp_link_on.text.replace("\xa0", " ")) #добавлям и декодируем
     print('- ВЫПОЛНЕНО')
-    return zp
+    return
 
 def adres():
     print('получение адеса по ссылке на вакансию', end=' ')
-
     for link in sort_list:
         locals = requests.get(link, headers=get_handres()).text
         localss = BeautifulSoup(locals, features='lxml')
+        # почему -то в двух местах.... или в одном или в другом месте
         local = localss.find('span', {'data-qa':"vacancy-view-raw-address"})
         local1 = localss.find('p', {'data-qa': 'vacancy-view-location'})
-        if local != None :
+        if local != None : # сортируем и добавляем
             adr.append(local.text)
         if local1 !=None:
             adr.append(local1.text)
@@ -78,11 +79,10 @@ def jobs():
         #не очень понимаю как, но такая информация не в одном месте...
         # они вроде друг - друга дублируют.... оставлю это
         jobs_link = jobs_links.find('span', {'data-qa': "bloko-header-2"}).text
-        jobs_all.append(jobs_link.replace("\xa0", " "))
-        #print (jobs_link.text)
+        jobs_all.append(jobs_link.replace("\xa0", " ")) # декодируем
     print('- ВЫПОЛНЕНО')
     return jobs_all
-
+# ну дальше и так все понятно
 def mix_grup(sort_list_all, zp, adress, jobs):
     print('создание словаря', end=' ')
     mix_sort = ({
@@ -100,9 +100,10 @@ def mix_grup(sort_list_all, zp, adress, jobs):
                 'зарплата': (mix_sort['zap'][a])
             })
     print ('- ВЫПОЛНЕНО')
-    return list
-
-
+    return
+def rec(load): # пишем в файл
+    with open('data.json', 'w') as f:
+        json.dump(load, f, ensure_ascii=False, indent=4)
 
 if __name__ == '__main__':
     link_on_page()
@@ -110,4 +111,5 @@ if __name__ == '__main__':
     adres()
     jobs()
     mix_grup(sort_list, zp, adr, jobs_all)
+    rec(list)
     pprint(list)

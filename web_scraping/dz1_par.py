@@ -37,6 +37,8 @@ mix_sort = {'adres': ['Москва, Кутузовская, Кутузовск�
          'до 150 000 руб. на руки',
          'от 7 000 до 9 000 USD до вычета налогов']}
 from pprint import pprint
+
+import json
 temp = []
 for a in range (len(mix_sort['adres'])):
     if 'Москва' in mix_sort['adres'][a] or 'Санкт-Петербург' in mix_sort['adres'][a]:
@@ -48,5 +50,6 @@ for a in range (len(mix_sort['adres'])):
         })
   #  else:
    #     continue
-pprint(temp)
+with open('data.json', 'w') as f:
+    json.dump(temp, f, ensure_ascii=False, indent=4)
 
