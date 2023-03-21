@@ -1,0 +1,4 @@
+Дата/время: 2023-03-21 16:42:44.122649
+Имя функции: para
+Аргумент (['Alex', 'Arthur', 'John', 'Peter', 'Richard'], ['Emma', 'Kate', 'Kira', 'Liza', 'Trisha']) - {}
+Результат ['Alex и Emma', 'Arthur и Kate', 'John и Kira', 'Peter и Liza', 'Richard и Trisha']
