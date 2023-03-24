@@ -2,3 +2,47 @@
 Имя функции: para
 Аргумент (['Alex', 'Arthur', 'John', 'Peter', 'Richard'], ['Emma', 'Kate', 'Kira', 'Liza', 'Trisha']) - {}
 Результат ['Alex и Emma', 'Arthur и Kate', 'John и Kira', 'Peter и Liza', 'Richard и Trisha']
+Дата/время: 2023-03-21 16:45:00.140591
+Имя функции: para
+Аргумент (['Alex', 'Arthur', 'John', 'Peter', 'Richard'], ['Emma', 'Kate', 'Kira', 'Liza', 'Trisha']) - {}
+Результат ['Alex и Emma', 'Arthur и Kate', 'John и Kira', 'Peter и Liza', 'Richard и Trisha']
+Дата/время: 2023-03-21 16:45:13.019641
+Имя функции: para
+Аргумент (['Alex', 'Arthur', 'John', 'Peter', 'Richard'], ['Emma', 'Kate', 'Kira', 'Liza', 'Trisha']) - {}
+Результат ['Alex и Emma', 'Arthur и Kate', 'John и Kira', 'Peter и Liza', 'Richard и Trisha']
+Дата/время: 2023-03-21 16:45:13.993533
+Имя функции: para
+Аргумент (['Alex', 'Arthur', 'John', 'Peter', 'Richard'], ['Emma', 'Kate', 'Kira', 'Liza', 'Trisha']) - {}
+Результат ['Alex и Emma', 'Arthur и Kate', 'John и Kira', 'Peter и Liza', 'Richard и Trisha']
+Дата/время: 2023-03-23 16:52:07.387207
+Имя функции: hello_world
+Аргумент () - {}
+Результат Hello World
+Дата/время: 2023-03-23 16:52:07.387635
+Имя функции: summator
+Аргумент (2, 2) - {}
+Результат 4
+Дата/время: 2023-03-23 16:52:07.387799
+Имя функции: div
+Аргумент (6, 2) - {}
+Результат 3.0
+Дата/время: 2023-03-23 16:52:07.453932
+Имя функции: para
+Аргумент (['Alex', 'Arthur', 'John', 'Peter', 'Richard'], ['Emma', 'Kate', 'Kira', 'Liza', 'Trisha']) - {}
+Результат ['Alex и Emma', 'Arthur и Kate', 'John и Kira', 'Peter и Liza', 'Richard и Trisha']
+Дата/время: 2023-03-23 20:33:23.753816
+Имя функции: hello_world
+Аргумент () - {}
+Результат Hello World
+Дата/время: 2023-03-23 20:33:23.754387
+Имя функции: summator
+Аргумент (2, 2) - {}
+Результат 4
+Дата/время: 2023-03-23 20:33:23.754669
+Имя функции: div
+Аргумент (6, 2) - {}
+Результат 3.0
+Дата/время: 2023-03-23 20:33:24.017634
+Имя функции: para
+Аргумент (['Alex', 'Arthur', 'John', 'Peter', 'Richard'], ['Emma', 'Kate', 'Kira', 'Liza', 'Trisha']) - {}
+Результат ['Alex и Emma', 'Arthur и Kate', 'John и Kira', 'Peter и Liza', 'Richard и Trisha']
