@@ -26,15 +26,14 @@ geo_log = [
 
 #задача 2
 def summ(id):
-
     b =[]
     for i in range (len (id)):
         for j in (id['user'+(str(i+1))]):
             b.append(j)
-    #print ([*set(b)])
+    # print ([*set(b)])
     #или
     #print([*set(sum(id.values(),[]))])
-    return [*set(sum(id.values(),[]))]
+    return [*set(b)]
 
 ids = {'user1': [213, 213, 213, 15, 213],
            'user2': [54, 54, 119, 119, 119],

@@ -1,6 +1,6 @@
 import unittest
 from unittest import TestCase
-from main import city, geo_log
+from main import city, geo_log, summ, ids
 
 
 class TestCity(TestCase):
@@ -17,8 +17,8 @@ class TestCity(TestCase):
         self.assertEqual(result, finish_geo_log)# тоже самое
 
 
-    # def test_len_listss(self):
-    #     result = len(ids_new_list(self.ids))
-    #     expected = 6
-    #     self.assertEqual(result, expected)
-    #
+    def test_len_list(self):
+        result = len(summ(ids))
+        expected = 6
+        self.assertEqual(result, expected)
+
