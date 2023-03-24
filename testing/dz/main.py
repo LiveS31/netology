@@ -8,7 +8,7 @@ def city(geo_logs):
         if geo_logs[i]['visit'+str(i+1)][1] =='Россия':
         #print (geo_logs[i]['visit'+str(i+1)][0])
             geo_logg.append((geo_logs[i]['visit'+str(i+1)][0]))
-    print(geo_logg)
+
     return geo_logg
 
 geo_log = [
