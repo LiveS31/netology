@@ -1,6 +1,6 @@
 import unittest
 from unittest import TestCase
-from main import city, geo_log, summ, ids
+from main import city, geo_log, summ, ids, yandex, lists
 
 
 class TestCity(TestCase):
@@ -17,8 +17,13 @@ class TestCity(TestCase):
         self.assertEqual(result, finish_geo_log)# тоже самое
 
 
-    def test_len_list(self):
+    def test_len_list(self): # узнаем соотвеиствие длинны
         result = len(summ(ids))
         expected = 6
         self.assertEqual(result, expected)
+
+    def test_social(self):
+        result = yandex(lists) # загоняем в переменную функцию, которую нужно вызвать
+        expected_dict = ['2018-01-01', 'yandex', 'cpc', 100]
+        self.assertNotEqual(result, expected_dict)
 

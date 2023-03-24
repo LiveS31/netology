@@ -70,16 +70,16 @@ def social(soc):
     for key,donat in soc.items():
         if donat == max(stats.values()):
             print (key)
-    return
+    return key
 
 stats = {'facebook': 55, 'yandex': 120, 'vk': 115, 'google': 99, 'email': 42, 'ok': 98}
 
 
 #Задание 5
-def yandex(list):
+def yandex(listss):
 
-    dic = list[-1] # или dic = lists.pop()
-    for i in (list[-2::-1]): # или for i in reversed(lists):
+    dic = listss[-1] # или dic = lists.pop()
+    for i in (listss[-2::-1]): # или for i in reversed(lists):
        dic = {i:dic}
     #print (dic)
     return dic
@@ -98,6 +98,6 @@ if __name__ == '__main__':
     city(geo_log)
     summ(ids)
     # seach(queries)
-    # social(stats)
-    # yandex(lists)
+    #social(stats)
+    yandex(lists)
 
