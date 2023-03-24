@@ -33,8 +33,8 @@ def summ(id):
             b.append(j)
     #print ([*set(b)])
     #или
-    print([*set(sum(id.values(),[]))])
-    return
+    #print([*set(sum(id.values(),[]))])
+    return [*set(sum(id.values(),[]))]
 
 ids = {'user1': [213, 213, 213, 15, 213],
            'user2': [54, 54, 119, 119, 119],
@@ -82,8 +82,8 @@ def yandex(list):
     dic = list[-1] # или dic = lists.pop()
     for i in (list[-2::-1]): # или for i in reversed(lists):
        dic = {i:dic}
-    print (dic)
-    return
+    #print (dic)
+    return dic
 
 def geo_logs_list(geo_list):
     geo_logs_filter = []
@@ -96,8 +96,8 @@ def geo_logs_list(geo_list):
 
 lists = ['2018-01-01', 'yandex', 'cpc', 100]
 if __name__ == '__main__':
-    city(geo_log111s)
-    # summ(ids)
+    city(geo_log)
+    summ(ids)
     # seach(queries)
     # social(stats)
     # yandex(lists)
