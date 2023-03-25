@@ -1,6 +1,8 @@
 import unittest
 from unittest import TestCase
 from main import city, geo_log, summ, ids, yandex, lists
+from ya import get_foldres
+
 
 
 class TestCity(TestCase):
@@ -26,4 +28,10 @@ class TestCity(TestCase):
         result = yandex(lists) # загоняем в переменную функцию, которую нужно вызвать
         expected_dict = ['2018-01-01', 'yandex', 'cpc', 100]
         self.assertNotEqual(result, expected_dict)
+
+    def test_ya(self):
+        result = get_foldres()# загоняем в переменную функцию, которую нужно вызвать
+        finish_geo_log = 201
+        #в переменную то что нужно получиь в ответе
+        assert result == finish_geo_log # самое сравнение
 

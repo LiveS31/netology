@@ -1,4 +1,4 @@
-
+import requests
 #изменение домашнего задания под функцию
 
 #Задание 1
@@ -40,21 +40,6 @@ ids = {'user1': [213, 213, 213, 15, 213],
            'user3': [213, 98, 98, 35]}
 #задание 3
 
-
-def seach(sech):
-    for j in range (1,len(sech)+1):
-        word1 = 0
-        for i in sech:
-            if len(i.split()) == (j):
-                word1 += 1
-        if word1 != 0:
-            if j ==1:
-                print(f'Поисковых запросов из {j}-ого словa: {(round(word1/(len(sech))*100))}')
-            else:
-                print (f'Поисковых запросов из {j}-х слов: {(round(word1/(len(sech))*100))}')
-    return
-
-
 queries = [
     'смотреть сериалы онлайн',
     'новости спорта',
@@ -64,16 +49,6 @@ queries = [
     'курс по питону',
     'сериалы про спорт'
     ]
-#задание 4
-def social(soc):
-
-    for key,donat in soc.items():
-        if donat == max(stats.values()):
-            print (key)
-    return key
-
-stats = {'facebook': 55, 'yandex': 120, 'vk': 115, 'google': 99, 'email': 42, 'ok': 98}
-
 
 #Задание 5
 def yandex(listss):
@@ -84,20 +59,14 @@ def yandex(listss):
     #print (dic)
     return dic
 
-def geo_logs_list(geo_list):
-    geo_logs_filter = []
-    for visit in geo_list:
-        for countries in visit.values():
-            if 'Россия' in countries:
-                geo_logs_filter.append(visit)
-    return geo_logs_filter
+
+
 
 
 lists = ['2018-01-01', 'yandex', 'cpc', 100]
 if __name__ == '__main__':
     city(geo_log)
     summ(ids)
-    # seach(queries)
     #social(stats)
     yandex(lists)
 
