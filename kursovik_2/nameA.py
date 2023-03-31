@@ -1,4 +1,3 @@
-
 import sqlalchemy as sq
 from sqlalchemy.orm import declarative_base, relationship
 
@@ -34,7 +33,7 @@ class User(Base):
     city = sq.Column(sq.String)
 
 class Interest_person(Base):
-    __tablenmae__ = 'interest_person'
+    __tablename__ = 'interest_person'
     interest_person_id = sq.Column(sq.Integer, primary_key=True)
     interest_id = sq.Column(sq.Integer, unique=True)
     vk_user_id = sq.Column(sq.Integer, unique=True)
@@ -45,4 +44,8 @@ class Interest(Base):
     interest_id = sq.Column(sq.Integer, primary_key=True)
     interest = sq.Column(sq.String)
 
+
+def create_tables(engine):
+    Base.metadata.drop_all(engine)
+    Base.metadata.create_all(engine)
 
