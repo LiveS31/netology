@@ -2,7 +2,7 @@ import configparser
 import requests
 import sqlalchemy
 from sqlalchemy.orm import sessionmaker
-from nameAA import create_tables
+from names import create_tables
 config = configparser.ConfigParser()
 config.read('pass.ini')
 code_dsn = config['dsn']['DSSN']
