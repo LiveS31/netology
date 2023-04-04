@@ -1,11 +1,14 @@
 import configparser
-import requests
+
 import sqlalchemy
 from sqlalchemy.orm import sessionmaker
-from names import create_tables
+
 config = configparser.ConfigParser()
-config.read('pass.ini')
+config.read('1.ini')
 code_dsn = config['dsn']['DSSN']
+
+from table import create_tables  #Publisher, Shop, Book, Stock, Sale # импортируем классы из файла models
+# + функцию создания таблиц
 
 DSN = code_dsn # из другого файла
 engine = sqlalchemy.create_engine(DSN)
@@ -13,6 +16,5 @@ engine = sqlalchemy.create_engine(DSN)
 Session = sessionmaker(bind=engine)
 session = Session()
 
-if __name__ == '__main__':
-    create_tables(engine)
-    session.close()
+create_tables(engine)
+session.close()
