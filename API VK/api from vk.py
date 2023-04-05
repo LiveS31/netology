@@ -13,7 +13,7 @@
 
 import time # таймер модуля времени для ограничения кол-во запросов
 
-token = 'vk1.a.bNuuXGlvNJmZVNVnuQs2DDbPwBkIRl6Gns60G8Zdnv-Y_XrDeXzqpVKhYtHr_xduyP09A-'
+token = 'vk1.a.gIUoQ24KEFMb-aECUbHCPNHmTJJWyxHvIZTlYUNs9QdSvyABfih98qTXic_MixbZcUcDK0cj-BoqrRD4lv0yZKmai0_aBwQAX6rYb2nd9HBVC2qlhvoVXezTFsaoq8m3RN_v8eX1hJbBdk84x4v0Z2b3VwL0CaojCIFBj397d-7QrlO-kLuDPkzPtfMMFNVAprU7E3BvysAnx5DeK02a7A&expires_in=0'
 import requests #для отправки запросов по api
 from pprint import pprint #чтобы красиво выводить сложные, вложенные объекты
 #import pandas as pd

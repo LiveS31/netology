@@ -1,4 +1,4 @@
-from settings import TOKEN_VK, KEY_GROUP
+#from settings import TOKEN_VK, KEY_GROUP
 from pprint import pprint
 import json
 import datetime
@@ -6,10 +6,11 @@ import vk_api
 import configparser
 
 config = configparser.ConfigParser()
-config.read('pass.ini')
+config.read('.pass.ini')
 
 def get_info_users(id_user):
     id_user = id_user
+    print(config['vk']['KEY_GROUP'])
     vk = vk_api.VkApi(token= config['vk']['KEY_GROUP'])
     response = vk.method('users.get', {'user_ids': id_user, 'fields': 'city, sex, bdate'})
     user_info = [response[0]['id'], response[0]['first_name'], response[0]['last_name'],
