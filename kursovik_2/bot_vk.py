@@ -4,11 +4,13 @@ import vk_api
 from vk_api.longpoll import VkLongPoll, VkEventType
 config = configparser.ConfigParser()
 config.read('.pass.ini')
-
-token = config['vk']['TOKEN_VK']#input('Token: ')
+token = config['vk']['KEY_GROUP']#input('Token: ')
 
 vk = vk_api.VkApi(token=token)
-longpoll = VkLongPoll(vk)
+longpoll = VkLongPoll(vk, 219698123)
+vk = vk.get_api()
+print (vk)
+
 
 
 def write_msg(user_id, message):
