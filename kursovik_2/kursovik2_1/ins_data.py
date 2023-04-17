@@ -156,5 +156,8 @@ def select_fav_client(user_id):
     res = conn.execute(sel)
     res_list_fav = ([i for i in res])
     return res_list_fav
-create_tables(engine)
+
+#create_tables(engine)
+ins_fav_data(1, '2', 'dggdg', 'gddgd', 'dfgd', 'dgdfgdgd')
+ins_data(1, 33, 'dgd', 'dfwgd')
 session.close()

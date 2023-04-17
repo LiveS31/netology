@@ -45,12 +45,12 @@ class VKinder_get_info:
     """Получаем информацию для запроса урла фото"""
 
     def get_all_result(self):
-        url_get_info = self.vk_url + "users.search?"
+        url_get_info = self.vk_url + "users.search"
         req = requests.get(url_get_info, params=self.params).json()
         all_result_list = [req['response']['items']]
         return all_result_list
 
-    def get_inf(self, user_id):
+    def get_inf(self, user_id: object) -> object:
         try:
             all_result_list = self.get_all_result()
             for items in all_result_list:
@@ -127,7 +127,7 @@ def get_user_param(user):
     req = requests.get("https://api.vk.com/method/users.get?", params=params).json()
     user_param = req['response'][0]
     request = f"{user_param['city']['title'].split('/')[0].strip()}, " \
-              f"{datetime.now().year - datetime.strptime(user_param['bdate'], '%d.%m.%Y').year}, " \
+              f"{datetime.now().year - datetime.strptime(user_param['date'], '%d.%m.%Y').year}, " \
               f"{'ж' if user_param['sex'] == 2 else 'м'}"  # противоположный пол
 
     return request

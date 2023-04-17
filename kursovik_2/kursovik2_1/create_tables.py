@@ -1,27 +1,46 @@
-# --create table if not exists Users (
-# --	user_id int primary key not null,
-# --	user_age int not null,
-# --	user_gender varchar(10) not null,
-# --	user_city varchar(50) not null
-# --);
-# --
-# --create table if not exists FavoriteClients (
-# --	client_id int primary key not null,
-# --	client_name varchar(20) not null,
-# --	client_surname varchar(50) not null,
-# --	client_link text not null,
-# --	client_photos text
-# --);
-# --
-# --create table "Users/Client" (
-# --	user_id int references users(user_id) not null,
-# --	favoriteclient_id int references FavoriteClients(client_id) not null,
-# --	primary key(user_id, favoriteclient_id)
-# --);
-# --
-# --create table "Users/Propose" (
-# --	user_id int references users(user_id) not null,
-# --	prop_client_id int not null,
-# --	primary key(user_id, prop_client_id)
-# );
+import configparser
+import sqlalchemy
+config = configparser.ConfigParser()
+config.read('.pass.ini')
+DSN = config['dsn']['DSSN']
 
+import sqlalchemy as sq
+from sqlalchemy.orm import declarative_base, sessionmaker
+
+Base = declarative_base()
+engine = sqlalchemy.create_engine(DSN)
+Session = sessionmaker(bind=engine)
+session = Session()
+class Users(Base):
+    __tablename__ = 'users'
+    user_id = sq.Column(sq.Integer, primary_key=True)
+    user_age = sq.Column(sq.Integer)
+    user_gender = sq.Column(sq.VARCHAR(10))
+    user_city = sq.Column(sq.VARCHAR(50))
+
+class FavoriteClients(Base):
+    __tablename__ = 'favoriteclients'
+    client_id = sq.Column(sq.Integer, primary_key=True)
+    client_name = sq.Column(sq.VARCHAR(20))
+    client_surname = sq.Column(sq.VARCHAR(50))
+    client_link = sq.Column(sq.TEXT)
+    client_photos = sq.Column(sq.TEXT)
+
+
+
+class Users_Client(Base):
+    __tablename__ = 'users_client'
+    user_id = sq.Column(sq.Integer, sq.ForeignKey(Users.user_id),primary_key=True)
+    favoriteclient_id = sq.Column(sq.Integer, sq.ForeignKey(FavoriteClients.client_id))
+
+class Users_Propose(Base):
+    __tablename__ = 'users_propose'
+    user_id = sq.Column(sq.Integer, sq.ForeignKey(Users.user_id), primary_key=True)
+    prop_client_id =sq.Column(sq.Integer)
+
+def create_tables(engine):
+    Base.metadata.drop_all(engine)
+    Base.metadata.create_all(engine)
+
+create_tables(engine)
+session.close()

@@ -99,11 +99,10 @@ def bot():
                 if req_err is False and message not in key_word:
                     req = sel_user_data(event.user_id)
                    # print(f'sex {req[-1][2]} age {req[-1][1]} city {str(req[-1][3].title())} user id {event.user_id}')
-                    info = VKinder_get_info(str(req[-1][2]).lower(), int(req[-1][1]), str(req[-1][3].title())).get_inf(
-                        event.user_id)
-                    #print(f'sex {sex} age {age} city {str(city.title())} user id {event.user_id}')
-                    # info = VKinder_get_info(str(sex).lower(), int(age), str(city.title())).get_inf(
-                    #     event.user_id)
+                   #  info = VKinder_get_info(str(req[-1][2]).lower(), int(req[-1][1]),
+                   #                          str(req[-1][3].title())).get_inf(event.user_id)
+                    print(f'sex {sex} age {age} city {str(city.title())} user id {event.user_id}')
+                    info = VKinder_get_info(str(sex).lower(), int(age), str(city.title())).get_inf(event.user_id)
 
                     if info is None:
                         write_msg(event.user_id, 'Не найдено совпадений. Попробуйте еще раз!', main_keyboard)
