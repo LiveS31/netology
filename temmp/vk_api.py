@@ -4,7 +4,7 @@ class VK:
 
    def __init__(self, access_token, user_id, version='5.131'):
        self.token = access_token
-       self.id = user_id
+       self.id = 10000
        self.version = version
        self.params = {'access_token': self.token, 'v': self.version}
 
@@ -16,6 +16,8 @@ class VK:
 
 
 access_token =
+
+
 user_id = '769656100'
 vk = VK(access_token, user_id)
 print(vk.users_info())

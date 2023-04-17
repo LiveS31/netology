@@ -17,7 +17,7 @@ def get_info_users(id_user):
     return user_info
 
 
-def search_users(sex, age_from, age_to, city):
+def search_users(sex, age_from, age_to, city):#
     all_persons = []
     link_profile = 'https://vk.com/id'
     vk = vk_api.VkApi(token= config['vk']['TOKEN_VK'])

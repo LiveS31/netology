@@ -1,16 +1,18 @@
 import vk_api
-import configparser
-config = configparser.ConfigParser()
-config.read('.pass.ini')
 from vk_api.longpoll import VkLongPoll, VkEventType
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
-# from token import GROUP_TOKEN
-from vk_info_user import search_users, get_info_users, get_photo, sort_photo, create_json
-#from vkinder import VKinder_get_info, VKinder_get_photo, get_user_param
-#from vkinder import MessagesSend
-#from Data.ins_data import ins_data, ins_fav_data, ins_propose_data, select_fav_client, sel_user_data
-#клавиатура
-vk_session = vk_api.VkApi(token=config['vk']['KEY_GROUP'])
+#from token import GROUP_TOKEN
+
+import configparser
+config =configparser.ConfigParser()
+config.read('.pass.ini')
+#token_vk = config['vk']['KEY_GROUP']
+GROUP_TOKEN = config['vk']['KEY_GROUP']
+from vkinder import VKinder_get_info, VKinder_get_photo, get_user_param
+from vkinder import MessagesSend
+from ins_data import ins_data, ins_fav_data, ins_propose_data, select_fav_client, sel_user_data, ins_user_client
+
+vk_session = vk_api.VkApi(token=GROUP_TOKEN)
 start_keyboard = VkKeyboard(inline=True)
 start_keyboard.add_button("Старт", VkKeyboardColor.PRIMARY)
 main_keyboard = VkKeyboard(inline=True)
@@ -54,8 +56,7 @@ def bot():
 
                 if str(message) == 'авто':
                     try:
-                        #auto_string = get_user_param(event.user_id)
-                        auto_string = search_users(event.user_id)
+                        auto_string = get_user_param(event.user_id)
                         auto_keyboard = VkKeyboard(inline=True)
                         auto_keyboard.add_button(auto_string, VkKeyboardColor.PRIMARY)
                         write_msg(event.user_id, f'Подбор по вашим данным:', auto_keyboard)
@@ -97,12 +98,10 @@ def bot():
 
                 if req_err is False and message not in key_word:
                     req = sel_user_data(event.user_id)
-                    print(f'sex {req[-1][2]} age {req[-1][1]} city {str(req[-1][3].title())} user id {event.user_id}')
-                    #info = VKinder_get_info(str(req[-1][2]).lower(), int(req[-1][1]), str(req[-1][3].title())).get_inf(
-                    #    event.user_id)
-                    info = get_info_users(str(req[-1][2]).lower() , int(req[-1][1], str(req[-1][3].title())).get_inf
-                   (event.user_id))
-                    print(f'sex {sex} age {age} city {str(city.title())} user id {event.user_id}')
+                   # print(f'sex {req[-1][2]} age {req[-1][1]} city {str(req[-1][3].title())} user id {event.user_id}')
+                    info = VKinder_get_info(str(req[-1][2]).lower(), int(req[-1][1]), str(req[-1][3].title())).get_inf(
+                        event.user_id)
+                    #print(f'sex {sex} age {age} city {str(city.title())} user id {event.user_id}')
                     # info = VKinder_get_info(str(sex).lower(), int(age), str(city.title())).get_inf(
                     #     event.user_id)
 
@@ -120,8 +119,7 @@ def bot():
                             ins_propose_data(event.user_id, info[2])
                             if [f"{event.user_id}, {sex}, {age}, {city}"] not in user_info:
                                 user_info.append([f"{event.user_id}, {sex}, {age}, {city}"])
-                            #photos = VKinder_get_photo(info[2]).get_photo_url()
-                            photos = get_photo(info[2]).get_photo_url()
+                            photos = VKinder_get_photo(info[2]).get_photo_url()
 
                             if photos is not None:
                                 for i in photos:
@@ -136,8 +134,7 @@ def bot():
                                       main_keyboard)
 
                 if message == '❤':
-                    photos = get_photo(info[2].get_photo_url())
-                    #photos = VKinder_get_photo(info[2]).get_photo_url()
+                    photos = VKinder_get_photo(info[2]).get_photo_url()
                     # добавляем данные понравившегося человека в "Избранное"
                     ins_fav_data(event.user_id, info[2], info[0], info[1], info[3], photos)
                     write_msg(event.user_id, f'❤ сохранили в Избранное ;\n', next_keyboard)
@@ -160,7 +157,7 @@ def bot():
                                              f'❤❤❤ для просмотра своего списка Избранных\n'
                                              f'или повторите поиск', main_keyboard)
 
-#запускается бот предлагае меню на выбор
+
 def run_bot():
     while True:
         longpool = VkLongPoll(vk_session)

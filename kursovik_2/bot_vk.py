@@ -16,7 +16,13 @@ print (vk)
 def keybord():
     keyboard = VkKeyboard(one_time=True)
     keyboard.add_button('Поиск участника', color=VkKeyboardColor.POSITIVE)
-
+    keyboard.add_button('Поиск участника', color=VkKeyboardColor.POSITIVE)
+    keyboard.add_button('Поиск Х участника', color=VkKeyboardColor.PRIMARY)
+    keyboard.add_button('Просмотр участника', color=VkKeyboardColor.PRIMARY)
+    keyboard.add_line()
+    keyboard.add_button('Запись в базу', color=VkKeyboardColor.NEGATIVE)
+    keyboard.add_line()
+    keyboard.add_location_button()
 
 def write_msg(user_id, message):
     vk.method('messages.send', {'user_id': user_id, 'message': message,  'random_id': randrange(10 ** 7),})
@@ -36,7 +42,7 @@ for event in longpoll.listen():
             elif request == 'Поиск участника':
                 write_msg(event.user_id,
                           'JKFb',
-                    keyboard=create_keyboard()
+                    #keyboard=create_keyboard()
                 )
 
            # else:

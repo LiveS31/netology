@@ -17,7 +17,7 @@ from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 from vk_api.longpoll import VkLongPoll, VkEventType
 Lslongpoll = VkLongPoll(vk_sesion)
 Lsvk = vk_sesion.get_api()
-user_mes = []
+user_mes = {}
 keyboard = VkKeyboard(one_time=True)
 #кнопк
 
@@ -33,6 +33,30 @@ keyboard.add_location_button()
 # прием - отправка
 
 flag = 0
+
+
+def user():
+    temp = {}
+    Lsvk.messages.send(
+        user_id=event.user_id,
+        random_id=get_random_id(),
+        keyboard=keyboard.get_keyboard(),
+        message='Город')
+    temp["Город"] = event.text
+
+    if event.from_user:
+        Lsvk.messages.send(
+                    user_id=event.user_id,
+                    random_id=get_random_id(),
+                    keyboard=keyboard.get_keyboard(),
+                    message='пол'
+                )
+        temp["Город"]= event.text
+        print (temp.keys())
+    print (temp)
+    return temp
+
+
 for event in Lslongpoll.listen():
     if event.type == VkEventType.MESSAGE_NEW and event.to_me and event.text:
         vars1 = ['g', 'хай']
@@ -52,20 +76,46 @@ for event in Lslongpoll.listen():
                     keyboard = keyboard.get_keyboard(),
                     message = event.from_user
                     )
+
+
         if event.from_user:
             if event.text == 'Поиск участника':
+                Lsvk.messages.send(
+                    #
+                    user_id=event.user_id,
+                    random_id=get_random_id(),
+                    keyboard=keyboard.get_keyboard(),
+                    message= "Город"
+                )
+            elif event.to_me:
+                    print(2,event.text)
+                    user_mes['Город'] = event.text
+                    Lsvk.messages.send(
+                    user_id=event.user_id,
+                    random_id=get_random_id(),
+                    keyboard=keyboard.get_keyboard(),
+                    message='пол'
+                )
+
+                    #print(3, event.text)
+            if event.from_user:
+
+                print(4, event.text)
+
                 Lsvk.messages.send(
                     user_id=event.user_id,
                     random_id=get_random_id(),
                     keyboard=keyboard.get_keyboard(),
-                    message='Город'
+                    message='возраст'
                 )
 
 
+print(user_mes)
 
-            print(1,event.text)
-            print(2,event.user_id)
-            print (3,event.from_user)
+            #
+            # print(1,event.text)
+            # print(2,evenrrt.user_id)
+            # print (3,event.from_user)
 
         #
         #     user_mes.append(event.text)
@@ -75,6 +125,6 @@ for event in Lslongpoll.listen():
         # elif event.text =='Поиск участника'
         # elif event.text == 'Просмотр участника'
         #print(user_mes)
-        print (user_mes)
-        print (f'ID User - {event.user_id}\nMessage - {event.text}')
+        #print (user_mes)
+#            print (f'ID User - {event.user_id}\nMessage - {event.text}')
 
