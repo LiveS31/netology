@@ -6,22 +6,21 @@ import sqlalchemy as sq
 from sqlalchemy.orm import declarative_base, sessionmaker
 config =configparser.ConfigParser()
 config.read('.pass.ini')
-#Base = declarative_base()
-#DNS = config['dsn']['DSSN']
-#from sqlalchemy.orm import declarative_base, Session
-
-
 
 Base = declarative_base()
 engine = sqlalchemy.create_engine(config['dsn']['DSSN'])
 Session = sessionmaker(bind=engine)
 session = Session()
+#conn= session.commit()
+
 class Users(Base):
     __tablename__ = 'users'
     user_id = sq.Column(sq.Integer, primary_key=True)
-    user_age = sq.Column(sq.Integer)
+    user_age = sq.Column(sq.Integer, unique=False)
     user_gender = sq.Column(sq.VARCHAR(10))
     user_city = sq.Column(sq.VARCHAR(50))
+
+
 
 class FavoriteClients(Base):
     __tablename__ = 'favoriteclients'
@@ -35,35 +34,35 @@ class FavoriteClients(Base):
 
 class Users_Client(Base):
     __tablename__ = 'users_client'
-    user_id = sq.Column(sq.Integer, sq.ForeignKey(Users.user_id),primary_key=True)
-    favoriteclient_id = sq.Column(sq.Integer, sq.ForeignKey(FavoriteClients.client_id))
+    user_id = sq.Column(sq.Integer, primary_key=True) #, sq.ForeignKey(Users.user_id),primary_key=True)
+    favoriteclient_id = sq.Column(sq.Integer)#, sq.ForeignKey(FavoriteClients.client_id))
 
 class Users_Propose(Base):
     __tablename__ = 'users_propose'
-    user_id = sq.Column(sq.Integer, sq.ForeignKey(Users.user_id), primary_key=True)
+    user_id = sq.Column(sq.Integer, primary_key=True)#, sq.ForeignKey(Users.user_id), primary_key=True)
     prop_client_id =sq.Column(sq.Integer)
 
 def create_tables(engine):
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
     session.close()
-create_tables(engine)
-
+#create_tables(engine)
+############################
 #
 # class Users(Base):
-#     __table__ = Table('users', metadata, autoload=True)
+#     __table__ = Table('users', e, autoload=True)
 #
 #
 # class User_Client(Base):
-#     __table__ = Table('users_client', metadata, autoload=True)
+#     __table__ = Table('users_client', MetaData, autoload=True)
 #
 #
 # class Favorite(Base):
-#     __table__ = Table('favorite', metadata, autoload=True)
+#     __table__ = Table('favorite', MetaData, autoload=True)
 #
 #
 # class Users_Propose(Base):
-#     __table__ = Table('users_propose', metadata, autoload=True)
+#     __table__ = Table('users_propose', MetaData, autoload=True)
 #
 #
 # users = Users
@@ -81,6 +80,7 @@ def ins_data(user_id, user_age, user_gender, user_city):
             user_gender=user_gender,
             user_city=user_city
         )
+        session.commit()
         conn.execute(upd)
     else:
         ins = insert(Users).values(
@@ -89,7 +89,9 @@ def ins_data(user_id, user_age, user_gender, user_city):
             user_gender=user_gender,
             user_city=user_city
         )
+        session.commit()
         conn.execute(ins)
+
 
 
 def ins_fav_data(user_id, client_id, client_name, client_surname, client_link, client_photo):
@@ -105,6 +107,7 @@ def ins_fav_data(user_id, client_id, client_name, client_surname, client_link, c
             client_link=client_link,
             client_photos=client_photo
         )
+        session.commit()
         conn.execute(ins)
         ins_user_client(user_id, client_id)
         print('add to favorite')
@@ -157,7 +160,11 @@ def select_fav_client(user_id):
     res_list_fav = ([i for i in res])
     return res_list_fav
 
-#create_tables(engine)
+create_tables(engine)
+
+ins_user_client(1, 1)
 ins_fav_data(1, '2', 'dggdg', 'gddgd', 'dfgd', 'dgdfgdgd')
-ins_data(1, 33, 'dgd', 'dfwgd')
+ins_data(1, 33, 'dgd', 'djjjd')
+ins_propose_data(1,2)
+session.commit()
 session.close()

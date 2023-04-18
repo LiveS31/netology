@@ -39,8 +39,8 @@ def write_msg(user_id, message, keyboard=None):
 
 user_info = []
 
-
 def bot():
+    global info
     key_word = ['старт', '❤', '❤❤❤', 'стоп', 'авто', 'запрос']
     req_err = False
     longpool = VkLongPoll(vk_session)
@@ -97,7 +97,7 @@ def bot():
                         req_err = True
 
                 if req_err is False and message not in key_word:
-                    req = sel_user_data(event.user_id)
+                    #req = sel_user_data(event.user_id)
                    # print(f'sex {req[-1][2]} age {req[-1][1]} city {str(req[-1][3].title())} user id {event.user_id}')
                    #  info = VKinder_get_info(str(req[-1][2]).lower(), int(req[-1][1]),
                    #                          str(req[-1][3].title())).get_inf(event.user_id)
@@ -143,10 +143,10 @@ def bot():
                     favorites = select_fav_client(event.user_id)
                     for item in favorites:
                         write_msg(event.user_id, f'{item[2]} {item[1]} - {item[3]}')
-                        # for i in item[4].split(","):
-                        #     i = i.replace('{', '').replace('}', '')
-                        #     print(f'fav - {i}')
-                        #     MessagesSend(event.user_id, i).send_photo()
+                        for i in item[4].split(","):
+                            i = i.replace('{', '').replace('}', '')
+                            print(f'fav - {i}')
+                            MessagesSend(event.user_id, i).send_photo()
 
                     write_msg(event.user_id, f'❤❤❤end❤❤❤')
                     message = 'стоп'

@@ -132,10 +132,10 @@ def search(searcht):
 
 #запуск кода
 if __name__ == '__main__':
-    with psycopg2.connect(database="", user="", password="") as conn:
+    # with psycopg2.connect(database="", user="", password="") as conn:
         with conn.cursor() as cur:
 # запуск функциий
-            #new_table() # создание таблиц
+            new_table() # создание таблиц
             #del_table() # Удаление таблиц
             #new_client( 'lef', 'LLef', 'dsfsdf', 45834534) #заполнение таблиц
             #add_nub(1, 34234) # Добавление номера существующего клиента

@@ -85,7 +85,7 @@ class VKinder_get_photo:
         }
 
     def get_photo_url(self):
-        url_photos_get = self.vk_url + "photos.get?"
+        url_photos_get = self.vk_url + "photos.get"
         req = requests.get(url_photos_get, params=self.params).json()
         attachment = []
         if 'response' in req.keys() and len(req['response']['items']) != 0:
@@ -112,7 +112,7 @@ class MessagesSend:
         }
 
     def send_photo(self):
-        url_send_message = self.vk_url + "messages.send?"
+        url_send_message = self.vk_url + "messages.send"
         req = requests.post(url_send_message, params=self.params).json()
         return req
 
@@ -122,9 +122,9 @@ def get_user_param(user):
         "access_token": access_token,
         "v": 5.131,
         "user_id": user,
-        "fields": 'sex, bdate, city, age'
+        "fields": 'sex, date, city, age'  ###
     }
-    req = requests.get("https://api.vk.com/method/users.get?", params=params).json()
+    req = requests.get("https://api.vk.com/method/users.get", params=params).json()
     user_param = req['response'][0]
     request = f"{user_param['city']['title'].split('/')[0].strip()}, " \
               f"{datetime.now().year - datetime.strptime(user_param['date'], '%d.%m.%Y').year}, " \
