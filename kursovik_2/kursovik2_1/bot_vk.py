@@ -4,13 +4,16 @@ from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 #from token import GROUP_TOKEN
 
 import configparser
+import sqlalchemy
 config =configparser.ConfigParser()
 config.read('.pass.ini')
 #token_vk = config['vk']['KEY_GROUP']
 GROUP_TOKEN = config['vk']['KEY_GROUP']
 from vkinder import VKinder_get_info, VKinder_get_photo, get_user_param
 from vkinder import MessagesSend
-from ins_data import ins_data, ins_fav_data, ins_propose_data, select_fav_client, sel_user_data, ins_user_client
+from ins_data import ins_data, ins_fav_data, ins_propose_data, select_fav_client, create_tables, ins_user_client
+engine = sqlalchemy.create_engine(config['dsn']['DSSN'])
+#create_tables(engine)
 
 vk_session = vk_api.VkApi(token=GROUP_TOKEN)
 start_keyboard = VkKeyboard(inline=True)
@@ -99,8 +102,8 @@ def bot():
                 if req_err is False and message not in key_word:
                     #req = sel_user_data(event.user_id)
                    # print(f'sex {req[-1][2]} age {req[-1][1]} city {str(req[-1][3].title())} user id {event.user_id}')
-                   #  info = VKinder_get_info(str(req[-1][2]).lower(), int(req[-1][1]),
-                   #                          str(req[-1][3].title())).get_inf(event.user_id)
+                    #info = VKinder_get_info(str(req[-1][2]).lower(), int(req[-1][1]),
+                                            # str(req[-1][3].title())).get_inf(event.user_id)
                     print(f'sex {sex} age {age} city {str(city.title())} user id {event.user_id}')
                     info = VKinder_get_info(str(sex).lower(), int(age), str(city.title())).get_inf(event.user_id)
 
@@ -119,6 +122,7 @@ def bot():
                             if [f"{event.user_id}, {sex}, {age}, {city}"] not in user_info:
                                 user_info.append([f"{event.user_id}, {sex}, {age}, {city}"])
                             photos = VKinder_get_photo(info[2]).get_photo_url()
+
 
                             if photos is not None:
                                 for i in photos:
@@ -141,6 +145,7 @@ def bot():
                 if message == '❤❤❤':
                     write_msg(event.user_id, f'❤ Ваш список избранных ❤')
                     favorites = select_fav_client(event.user_id)
+                    print(favorites)
                     for item in favorites:
                         write_msg(event.user_id, f'{item[2]} {item[1]} - {item[3]}')
                         for i in item[4].split(","):
