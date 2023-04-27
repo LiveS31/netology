@@ -8,8 +8,12 @@ config =configparser.ConfigParser()
 config.read('.pass.ini')
 GROUP_TOKEN = config['vk']['KEY_GROUP']
 from vkinder import VKinder_get_info, VKinder_get_photo, get_user_param
-from vkinder import MessagesSend
+from vkinder import MessagesSend, coincidence
 from ins_data import ins_data, ins_fav_data, ins_propose_data, select_fav_client#, sel_user_data, ins_user_client
+
+# if coincidence =='':
+#     ads=1
+
 
 vk_session = vk_api.VkApi(token=GROUP_TOKEN)
 start_keyboard = VkKeyboard(inline=True)
@@ -100,11 +104,12 @@ def bot():
                         print(f'Нет данных!!!!')
                     else:
                         if len(info) != 0:
+                            ids = 0
                             write_msg(event.user_id, f'{info[0]} {info[1]} - {info[3]}')
                             # добавляем полученные данные в таб. Propose
                             print(f'for id {event.user_id} : {info[0]} {info[1]} - {info[3]}')
                             # добавляем полученные данные в таб. Propose
-                            ins_propose_data(event.user_id, info[2])
+                            ins_propose_data((ids+len(coincidence)), event.user_id, info[2])####
                             if [f"{event.user_id}, {sex}, {age}, {city}"] not in user_info:
                                 user_info.append([f"{event.user_id}, {sex}, {age}, {city}"])
                             photos = VKinder_get_photo(info[2]).get_photo_url()

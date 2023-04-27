@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<ul style="color: orange; font-size:50px">
+    {%for x in data %}
+    {% if x > 5 %}
+    <li>{{ x }}</li>
+    {% endif %}
+    {% endfor %}
+</ul>
+<p style="color: red; font-size:100px">
+    {{test}}
+    {{data }}
+    <p>
+    {{ val.upper }}
+    </p>
+</p>
+</body>
+</html>

@@ -61,7 +61,8 @@ class VKinder_get_info:
                             result = item['first_name'], item['last_name'], item[
                                 'id'], f"https://vk.com/{item['screen_name']}"
                             coincidence.append(f"{user_id}-{item['id']}")
-                            print(coincidence)
+                            #print(coincidence)
+                            print(len(coincidence))###
                             return result
                     else:
                         continue

@@ -1,0 +1,97 @@
+ для создания проекта нужно:
+django-admin startproject lesson1 .
+django-admin - команда администратора
+startproject - что делать (в двнном случае создать проект)
+lesson1 - название проекта
+. - где создать ( . - обознаечат в той же папке)
+
+__Для запуска сервера  команда
+python3 manage.py runserver
+python3 manage.py- главный файл
+runserver - что именно требуется запустить
+
+если сервер запустился удачно будет вот такое сообщение:
+Watching for file changes with StatReloader
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+You have 18 unapplied migration(s). Your project may not work properly until you apply the migrations for app(s): admin, auth, contenttypes, sessions.
+Run 'python manage.py migrate' to apply them.
+April 24, 2023 - 13:38:03
+Django version 4.2, using settings 'lesson1.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+
+
+КЛАССИЧЕСКИЙ СЕРВЕР И РОИТИНГ
+для создания приложения нужно
+python3 manage.py startapp demo
+lдля запускаприложения:
+python3 manage.py - обязательно
+startapp - команда
+demo - название приложения
+demo - нужно обязательно добавть в файл settings -> install apps
+
+в файле views - пишется функция (с обязательным значением request)
+так же в данный файл импортируется библиотека HttpResponse (from django.http import HttpResponse)
+в файле urls- происходит вызов функции (записанной в файле views)
+(функцию требуется испортировать в файл urls. пример: from demo.views import index)
+в файл urls - прописать вызов функции (path('', index), , где ''- указывается путь для вызова, index - сама функция)
+для примера функция вывода времени
+пишем в views
+def time(request):
+    return HttpResponse(f'Time = {datetime.datetime.now().time()}')
+путь описываем в urls
+
+дебаг проекта:
+настройка запуска файла для запуска, появляется возвожность старта дебаг (режим отладки)
+
+__параметрализация запроса:
+чтобы сосдать запрос ?name=Sasha
+? - то что будет отправлен запрост на сервер
+name - параметр (name для примера)
+sasha - значением (sasha для примера)
+далее дополнительные парамеры чрез &
+&age=22 - пример
+
+чтобы передавать параметры в url через функцию:
+sum/<a>/<b>/ - где a and b есть переменные для передачи
+параметры <a>/<b> должны называться обязательно одинаково с названием в функцыи
+
+введение в шаблоны:
+шаблоны это расширенный HTML запрос
+настройки располагаются в файле settings -> TEMPLATES
+DIRS': [] - папки приложений
+'APP_DIRS': True - искать шаблоны в папках приложений
+нужно создать папку TEMPLATES в папке приложения
+в папке TEMPLATES создаем шаблон HTML ( например demo.html)
+можно передавать параметры в словаре
+создаем context - это простой словарь
+{%for x in data %} - списки можно перебирать циклом
+    {{ x }}
+    {% endfor %} - но его нужно закрыть
+
+чтобы список был маркированный
+<ul style="color: orange; font-size:50px">
+    {%for x in data %}
+    <li>{{ x }}</li>
+    {% endfor %}
+</ul>
+так же можно примемять условия
+{% if x > 5%}
+{% endif %} - нужно обязательно закрывать
+можно применять такие усвия как upper - тоже будеттработать как в python
+
+пагинация
+{% for e in page %}
+<p>{{ e }}</p>
+{% endfor %}
+делаем кнопки вперед, назад в pagi
+{% if page.has_previous %}
+<a href="?page={{ page.previous_page_number}}">Назад</a>
+{% endif %}
+
+{% if page.has_next %}
+<a href="?page={{ page.next_page_number}}">Вперед</a>
+{% endif %}

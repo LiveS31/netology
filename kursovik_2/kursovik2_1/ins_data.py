@@ -6,6 +6,7 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 config = configparser.ConfigParser()
 config.read('.pass.ini')
 
+
 Base = declarative_base()
 engine = sqlalchemy.create_engine(config['dsn']['DSSN'])
 Session = sessionmaker(bind=engine)
@@ -42,13 +43,17 @@ class Users_Client(Base):
 
 class Users_Propose(Base):
     __tablename__ = 'users_propose'
-    user_id = sq.Column(sq.Integer, sq.ForeignKey(Users.user_id), primary_key=True)
+    id = sq.Column(sq.Integer, unique=True)
     prop_client_id = sq.Column(sq.Integer, primary_key=True)
+    user_id = sq.Column(sq.Integer, sq.ForeignKey(Users.user_id))#, primary_key=True)
+
 
 def create_tables(engine): #функция созания и удаоения таблиц
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
     session.close()
+create_tables(engine)
+
 
 #Заполнение таблиц
 def ins_data(user_id, user_age, user_gender, user_city):
@@ -117,7 +122,7 @@ def ins_user_client(user_id, fav_client_id):
         session.add(Users_Client
                 (
                 user_id=user_id,
-                favoriteclient_id=fav_client_id,
+                favoriteclient_id=fav_client_id
                 )
             )
     else:
@@ -128,16 +133,18 @@ def ins_user_client(user_id, fav_client_id):
 
 
 
-def ins_propose_data(user_id, client_id):
+def ins_propose_data(ids,  user_id, client_id):
     if (session.query(Users_Propose).filter(Users_Propose.user_id == user_id).first() is None):
         session.add(Users_Propose
                 (
+                id = ids,
                 user_id=user_id,
-                prop_client_id=client_id,
+                prop_client_id=client_id
                 )
             )
     else:
         user= session.query(Users_Propose).filter(Users_Propose.user_id== user_id).first()
+        user.id = ids
         user.user_id= user_id
         user.prop_client_id=client_id
     session.commit()
