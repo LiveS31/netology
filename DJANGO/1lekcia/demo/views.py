@@ -1,9 +1,10 @@
 import datetime
 
 from django.core.paginator import Paginator
-from django.shortcuts import render #библиотека,
 # которая позволяет переработать в валидный HTML text
 from django.http import HttpResponse
+from django.shortcuts import render  # библиотека,
+
 # Create your views here
 '''простые запросы'''
 def index(request):

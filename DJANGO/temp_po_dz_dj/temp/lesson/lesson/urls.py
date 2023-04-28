@@ -1,8 +1,7 @@
-"""
-URL configuration for lesson1 project.
+"""lesson URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.2/topics/http/urls/
+    https://docs.djangoproject.com/en/3.1/topics/http/urls/
 Examples:
 Function views
     1. Add an import:  from my_app import views
@@ -14,19 +13,9 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from demo.views import index, time, hello, sum, index2, pagi  # , timetwo
 from django.contrib import admin
 from django.urls import path
 
-#from demo.views import users
-
-urlpatterns = {
+urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', index),
-    path('time/', time),
-    path('hello/', hello),
-    path('sum/<int:op1>/<int:op2>/', sum),
-    path('index/', index2),
-    path('pagi/', pagi)
-
-}
+]
