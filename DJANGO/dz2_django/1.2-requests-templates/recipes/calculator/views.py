@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+
 
 DATA = {
     'omlet': {
@@ -20,12 +20,21 @@ DATA = {
     # можете добавить свои рецепты ;)
 }
 def home_view(request):
-    template_name = 'home.html'
     temp = []
     for item in DATA:
         temp.append(item)
     context = {'recipe': temp}
-    return render(request, template_name, context)
+    return render(request, 'calculator/home.html', context)
+
+def recept_view(request, name):
+    serv = int(request.GET.get('man', 1))
+    context = {'recipe': ''}
+    if name in DATA:
+        context['recipe'] = DATA[name]
+        for item in context['recipe']:
+            context['recipe'][item] *=serv
+
+    return render(request, 'calculator/index.html', context)
 
 # Напишите ваш обработчик. Используйте viview_recipeewDATA как источник данных
 # Результат - render(request, 'calculator/index.html', context)
