@@ -44,7 +44,7 @@ user_info = []
 
 def bot():
     global info
-    key_word = ['старт', '❤', '❤❤❤', 'стоп', 'авто', 'запрос']
+    key_word = ['старт', '❤', '❤❤❤', 'стоп', 'авто', 'запрос'] #
     req_err = False
     longpool = VkLongPoll(vk_session)
     for event in longpool.listen():
@@ -166,7 +166,7 @@ def run_bot():
 
                     else:
                         write_msg(event.user_id, f'Привет 🤗\n'
-                                                 f'Vkinder6 приветствует Вас!\n'
+                                                 f'Vkinder приветствует Вас!\n'
                                                  f'Хотите с кем нибудь познакомиться?\n'
                                                  f'Нажмите "Старт"!!!', start_keyboard)
                         continue

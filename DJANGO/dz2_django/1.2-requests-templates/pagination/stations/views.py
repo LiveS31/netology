@@ -11,7 +11,7 @@ def index(request):
 def bus_stations(request):
     # получите текущую страницу и передайте ее в контекст
     # также передайте в контекст список станций на странице
-    text =[]
+    text = []
     with open('data-398-2018-08-30.csv') as f:
         DictReader_odj = csv.DictReader(f)
         for item in DictReader_odj:
@@ -26,5 +26,4 @@ def bus_stations(request):
          'page': page,
     }
 
-    print(context)
     return render(request, 'stations/index.html', context)
