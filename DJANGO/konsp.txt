@@ -95,3 +95,175 @@ DIRS': [] - папки приложений
 {% if page.has_next %}
 <a href="?page={{ page.next_page_number}}">Вперед</a>
 {% endif %}
+
+__________________________
+
+ORM/BASE DATA
+orm - прозрачность работы с базами данных
+информация храмнится в файле models.py
+для примера
+в файле models.py
+создаем КЛАСС
+class Car(models.Mode):
+    brand = models.CharField(max_length =50)
+    model = models.CharField(max_length =50)
+    color = models.CharField(max_length =20)
+где brand, model, color - название колонок таблици, а
+models.CharField(max_length =50) - текстовая колонка с длинной в 50 символов
++ django добовляет еще один столбик - id. итого в таблице Сar получается 4 столбика
+
+Создаем еще одну таблицу
+class Person(models.Model):
+    name = models.CharField(max_length= 50)
+    car = models.ForeignKey(Car, on_delete=models.CASCADE)
+models.ForeignKey(Car, on_delete=models.CASCADE)- значит связать с таблицей (классом) CharField
+при этом CAR - с какой таблицей связать,
+on_delete=models.CASCADE- что сделать если такой записи нет.
+
+для того чтобы работала такая функция -
+заегистрировать приложение ( это стандартно)
++ в терминале прописать python manage.py makemigrations
+(после этого появится еще один файл в папке миграция
+после выполнениея команды нужно приминить миграцию командой:  python manage.py migrate
+после этого так же создается и база данных
+настройки ее можено посмотреть в файле settings.py DATABASES
+
+чтобы подключить (изменить базу данныйх нужно)
+1. создать базу данных (createtdb -U postgres demoorm)
+2. установить драйвер (pip install psycopg2-binary)
+3. В settings изменить на базу данных postgressql
+   NAME: 'demoorm'
+   USER: 'postgres'
+   PASSWORD: 'postgres'
+4. повторить миграцию   python manage.py migrate
+
+Заметки в базу данных:
+открываем файл views.py
+создаем функцию:
+def create_car(request):
+    car = Car(brand='demo', model='demo', color='demo')
+где заполняем таблицу
+    car.save()
+- запись данных в таблице
+    return HttpResponse(f'Все получилось {car.brand}, {car.model}')
+
+для вызова, как обычно прописывем путь  в urls.py
+pach('new_car/', create_car)
+
+далее создадим несколько авто:
+import random
+
+def create_car(request):
+    car = Car(
+    brand=random.choice(['B1', 'B2', 'B3']),
+    model=random.choice(['M1','M2','M3']),
+    color=random.choice(['C1','C2','C3'])
+    )
+где заполняем таблицу
+    car.save()
+- запись данных в таблице
+    return HttpResponse(f'Все получилось {car.brand}, {car.model}')
+
+для вывода объекта
+def list_car(request):
+    car.objects = Car.objects.all()
+- где objects- это менеджер по управлению,
+- all - все данные в таблице
+- Сar - класс (или в данном месте таблица ) из колторой нужно выбирать данные.
+    cars = [f'{c.brand, {c.model}: {c.color}' for c in car_objects]
+- получаем строку из таблицы Car циклом с переменной с.
+--если нужно получить столбик ID - дописать cars = [f'{c.id}, {c.brand, {c.model}: {c.color}' for c in car_objects]
+    return HttpResponse('<br>'.json(cars))
+- выводим данные в из таблици
+<br> - каждый вывод с новой строки
+
+далее так же добавляем в файле views.py pach('cars/', list_car)
+(не забываем импортировать)
+
+чтобы выролнить выборку по нужному фильтру нужно:
+def list_car(request):
+    car.objects = Car.objects.filtet(brand='B1) - будет выбраны все таблицы где присутствует B1
+-- если (brand__contains='2') - все бренды содержащие '2'
+-- если (brand__startswith='2') - все бренды, что начинаются со строки '2'
+    cars = [f'{c.brand, {c.model}: {c.color}' for c in car_objects]
+    return HttpResponse('<br>'.json(cars))
+
+присвоим каждому человеку свой автомобиль:
+def create_person(request):
+    cars = Car.objects.all()
+    for car in cars:
+        Person(name='P', car=car).save()
+-Person(name='P', car=car).save()- записываем данные имя =Р, car - соответствует циклу, save- соответствует циклу For
+- или можно еще так:
+        Person.objects.create(name='P', car=car)
+    return HttpResponse('Все получилось'))
+создаем новый маршрут в path('new_person/', create_person),
+
+--для вывода из таблици сделаем функцию как и с кар
+def list_person(request):
+    person_objects = Person.objects.all()
+    people = [f'{p.name}:{p.car} for p in person_objects]
+    return HttpResponse('<br>'.json(pejple))
+регистрируем:
+path('people/', list_person)
+
+чтобы получить владельца наоборот нужно дописать в models.py
+
+retated_name='owners'  - описывает связь в обратную сторону
+
+class Person(models.Model):
+    name = models.CharField(max_length= 50)
+    car = models.ForeignKey(Car, on_delete=models.CASCADE, retated_name='owners')
+models.ForeignKey(Car, on_delete=models.CASCADE)- значит связать с таблицей (классом) CharField
+при этом CAR - с какой таблицей связать,
+on_delete=models.CASCADE- что сделать если такой записи нет.
+
+-доавим информацию для выборки данных по обратной связи:
+
+{c.oweners.count()} - по обратной связи в таблице, счетчики.. (можно применить и другие фильтра)
+
+def list_car(request):
+    car.objects = Car.objects.filtet(brand='B1)
+    cars = [f'{c.brand, {c.model}: {c.color}|{c.oweners.count()}' for c in car_objects]
+    return HttpResponse('<br>'.json(cars))
+
+___создание административной панели по управлению базой данных
+
+в файле admin.py
+(в него же импортирм from .models import Person, Car)
+с помощью декоратора @
+@admin.register(Car) - будет администратором для модели Car
+
+class CarAdmin(admin.ModelAdmin):
+    pass
+
+Если перейти в браузере /admin/ - откроется меню введите логин и пароль.
+чтобы создать поьзователя нужно в окне терминала:
+python manage.py createsuperuser
+ввести пользователя:
+ввести почту: - можно оставить пустым
+ввести пароль: - с повторением
+
+--после этого можно войти в административную панель dgango
+набрав в браузере /admin/
+
+войдя попадаем в меню секций
+1. пользовате и аутификация и пользователи (их не трогаем - из коробки)
+
+2. называется так же как и приложение. в данном приложении нахродится наша модель (Car)
+
+--настраиваем отображение в административной панеле
+class CarAdmin(admin.ModelAdmin):
+    list_display = ['id', 'brand', 'model', 'color',]
+где list_display- list обображеня. далее столбцы для отображения]
+    list_filter = ['brand','model']
+где list_filter- параметр, далее значение параметра
+
+и парамер Person
+
+@admin.register(Person)
+class PersonAdmin(admin.ModelAdmin):
+    list_display = ['is', 'name', 'car']
+
+
+
