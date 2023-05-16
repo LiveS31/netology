@@ -9,7 +9,6 @@ class Phone(models.Model):
     release_date = models.CharField(max_length=10)
     lte_exists = models.BooleanField()
     slug = models.SlugField(null=False, unique=True)
-
     def save(self, *args, **kwargs):  # new
         if not self.slug:
             self.slug = slugify(self.name)

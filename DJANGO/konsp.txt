@@ -239,7 +239,7 @@ class CarAdmin(admin.ModelAdmin):
 
 Если перейти в браузере /admin/ - откроется меню введите логин и пароль.
 чтобы создать поьзователя нужно в окне терминала:
-python manage.py createsuperuser
+python3 manage.py createsuperuser
 ввести пользователя:
 ввести почту: - можно оставить пустым
 ввести пароль: - с повторением
