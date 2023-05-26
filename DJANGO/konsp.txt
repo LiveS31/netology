@@ -265,5 +265,162 @@ class CarAdmin(admin.ModelAdmin):
 class PersonAdmin(admin.ModelAdmin):
     list_display = ['is', 'name', 'car']
 
+--ORM2--
+
+базы данных то модели и после изменению нужно делать миграцию
+
+1. Создание связей многие ко многим:
+в модуле models.py
+
+создаем таблицу модели
+class Product(models.Model):
+    name = models.CharField(max_length=100) # текстовая столбец с именем name и ограничением в 100 символов
+    price = models.IntegerField() # столбец price - цыфра без ограничения по цифрам
+    category = models.CharField(max_length=50)
+
+вторая таблица заказ:
+
+class  Order(models.Model):
+    products = models.ManyToManyField(Product, related_name='orders')
+ManyToManyField - связь многие ко многим
+Product - таблица к которой обращаемся
+related_name= - чтобыиз другой таблице тоже можно было обратиться к заказу
+'orders' - название  ( и те заказы в которых учавствует продукт)
+теперь можно получить все заказы через product и из заказов через orders
+
+создаем миграцию через python3 manage.py mikemigrations - создаем таблицу и миграцию
+для создания страниц
+применени'orders'не миграции python3 manage.py migrate - применяем миграцию
+
+для вывода заказа нужно колличества товара нужно промежуточная модель(таблица)
+(django - создаст ее автоматически, но можно создать сомостоятельно)
+для этого:
+
+class OrderPosition(models.Model):
+    product = models.ForeignKey(Product, on_delete=CASCADE, related_name='positions')
+on_delete=CASCADE - удаление использует каскад при отсутствии данных
+related_name='position' получаем позиции от продукта в которых он учавствует
+ForeignKey - внешний ключ
+    order = model.ForeignKey(Order, on_delete=models.CASCADE, related_name='positions')
+    order - тот заказ к которому относится эта позиция
+    related_name='positions' - чобы из заказа тоже можно было достуаться до позиции.
+    quantity = moduls.IntegerField() - это будет счетчик и целое число,  которое будем испольоват
+
+После эих действий нужно выполнить миграцию и применить ее.
+Будет создан файл 0002_.......py - в папке migrations.
+
+==Настройка панели администратора
+
+переходим в admin.py
+пропишем класс для продуктов
+
+from .moduls import Product, Order, OrderPosition - импортируем классы
+
+@admin.register(Product)
+class ProductAdmin(admin.ModulAdmin):
+Настроим отображение
+    list_display = ['id', 'name', 'category', 'price']
+настроем фильтр
+    list_filter = ['category']
 
 
+регистрируем таблицу Order
+
+@admin.register(Order)
+class OrderAdmin(admin.ModulAdmin):
+    list_display = ['id']
+
+
+нам нужны инлайн модели позволяет встраивать в наше отображерние другое отображение
+создаем inline модель
+
+class OrderPositionInLine(admin.TabularInLine):
+необходимо указать модель (обязательный параметр)
+    model = OrderPosition
+и есть необязательные параметры например
+    extra = 3 (это значение по умолчанию, отвечает за количестро строк)
+
+теперь дописываем таблицу OrderAdmin
+@admin.register(Order)
+class OrderAdmin(admin.ModulAdmin):
+    list_display = ['id']
+    inlines = [OrderPositionInLine] - говорим, что будем использовать эту позицию
+
+-- Убираем дублирование
+переходим в models
+в таблице
+class Order(models.Model):
+    заменяем записи на
+    pass
+
+Вся связь бдет производиться с помощью талицы OrderPosition
+и сново выполнить миграции.
+
+    ===как делать  все в коде
+переходим в views.py
+получать данные будеим через шаблон
+def list_ordres(request):
+    orders = Order.objects.all() - получаем все заказы
+передаем их всех в контекст
+    context = {'orders':order} -   в наш список заказов
+    return render(request, 'orders.html', context)
+
+== для работы шаблонов создаем папку TEMPLATES
+    внутри создаем файл orders.HTML
+
+в TEMPLATES order.html пишем
+{% for order in orders %}
+    <p>Заказ №{{ order.id }}</p>
+пройдемся циклопо всему
+{% for possition in order.possition.all %} - .possition.all - я вляется менеджером и all можно заменить на filtet и вывасти только нужные данные
+например {% for possition in order.possition.filter(positions__product__price__gte=600 %}
+gte - больше, lte- меньше,.....
+<p>{{ position.product.name }}:{{ position.quantity }}</p>
+{% endfor %}
+{% endfor %}
+
+pзаходим в urls.py
+прописываем путь
+path ('orders/', list_ordres),
+
+through -параметр можно явно указать промежуточную таблицу для связи «многие ко многим»
+
+modesl- разобраться
+
+-- Для использования окружеия (спрятать код)используют слдующее окружение:
+    python-dotenv
+    python-decouple
+    django-environ
+pip install - имя пакета
+после заводим специальный файл .env
+для забора данных из файла -
+import os
+from dotrnv import load_dotenv
+load_dotenv()
+SECRET KEY = os.getenv('SECRET')
+где SECRET KEY - это значение в settings.py
+    SECRET - это код из файла который мы импортируем
+    load_dotenv - это функция с помощью чего прооисходи вызов
+для ALLOWED_HOST - os.getenv('ALLOWED_HOST).split(',')
+
+slug - это строка которая может содержать буквы, цифры, нужние подчеркивания, дефис
+НЕ МОЖЕТ содержать специальные символы
+применяется в интернет магазинах - тренслитированное название товара (новости) + какой то рандомный id
+напоминание:
+unique=True - уникальное значение
+on_delete = models.CASCADE - удаление при отсутствие
+related_name - какое то название по которо можно получить связанные объекты
+models.DecimalField(max_digits=10, decimal_places=2) - для цены лучше использовать его
+у него два параметра max_digits - максмальное значение цыфр ,
+decimal_places - колличество знако после запятой
+метод str  - для того , чтобы нормально чтобы нормально выводилась иформаця из таблица
+в противном случае будет выводить ячейку папяти
+blank=True- поле может быть пустым (не обязательно для ввода)
+ManyToManyField - связь многие ко многим
+DateTimeField - заполнение декоратора
+DateTimeField(auto_now_add=True) - заполнение автоматически
+SmollIntengerFild - скольно можно заказать ( сколько он может хранить(\
+(максимум 32000)
+PositiveSmollIntengerFild- может хранть только положительные значения
+class Meta - класс в котором содержится дополнительная информация
+(например сортировк, индексы...)
