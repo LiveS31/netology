@@ -424,3 +424,115 @@ SmollIntengerFild - скольно можно заказать ( сколько 
 PositiveSmollIntengerFild- может хранть только положительные значения
 class Meta - класс в котором содержится дополнительная информация
 (например сортировк, индексы...)
+_- когда создаем классы в models -> создаются таблицы.
+но все имена таблиц начинаются с main_....
+чтобы таблицы назывались, как нужно без дополнительных надписей ->  в классе Meta
+нужно написать (пример):
+    class Meta:
+        db_tadle = 'название таблици' - писать в классе создания таблиц
+
+__обращение к базе данных (для примера)
+class ProductListView(View):
+    def get(sefl,  request):
+        product = Product.objects.all()
+        return render(request, templaete_name, {'product': product})
+Product - это база данных
+objects - обращение в базу данных
+.all - обращение в базу данных
+
+-- файлы urls.py можно создавать в каждом тепплайте
+для жто создаем файл и внутри обязательно пишем
+from django.urls inmport path
+urlpatterns = [
+тут пишем пути типа
+path = ('product/', ProductListView.as_view(), name='list']
+-- в файле views.py
+в классе что открыт на странице:
+paginate_by - выбираем колличество отображения на странице
+page_kwarg = 'p' - ключ для вывода отображения запроса
+выглядит в браузере так - padge=2 (где 2 нмер страниц)
+__фильтрация:
+создаем класс и наследуем его от родительского (Для примера)
+def get_quryset(self):
+    queryset = super().get_quryset() - получаем данные от родительского класса
+    price_from = self.request.GET.get('price_from', 0) - получаем параметры от (0 поумолчанию)
+    price_to = self.request.GET.get('price_to', 0) - до 0 получаем параметры до (0 поумолчанию)
+    if price_from:
+        queryset = queryset.filter(price__gte=price_from)
+    if price_to:
+        queryset = queryset.filter(price__lte=price_to)
+--get, lte - это условия к действию
+     q = self.request.GET.Get('search')
+        if q:
+            queryset = queryset.filter(name__incontains=q)
+    return queryset - возвращаем его
+--Обязательные параметры
+
+class ProductsListByCategory(view):
+    def get(sefl, request, обязательный параметр category_id):
+        product = Product.objects.filter(category_id=category_id) - фильтрация
+        (в самой таблице отображается как category_id - не смотря та то , что пишем как category)
+        templaete_name = 'product/list.html'
+        return render (request, templaete_name, {'product': product}))
+ обязательный параметр нужно добавит в urls
+ path('products/<slug:category_id>/', ProductsListByCategory.as_view(), name= 'list-by-category')
+
+ ---
+ Знакомство с API на примере Django REST framework
+ ---
+ 1.Устанавливаем библиотеку фраемворка
+    pip install djangorestramework
+ 2. добовляем его в setting.py -> installed_apps -> add "rest_framework'
+
+ Сама работа с обработчиками
+ (view)
+ @api_view(['GET']) #декоратор из библиотеки
+def game(request):
+    data = {'message':'Hello'} #словарь сообщение и текст сообения
+    return Response(data) # Response - обработчик импортируем
+    (urls)
+paht('demo/', game)
+сделать миграцию
+
+---теперь работа с моделями
+создадит класс оружия
+
+class Wearpon(models.Model):
+    power = models.IntegerField()
+    rerety = models.CharField(max_length=50)
+    value = models.IntegerField()
+Wearpon(power = 10, rerety='apple', value = 100).save() - добовляем в него
+-
+саризатор (serializers.py)- специальных класс которы знает как превравтить сложный файл в объект
+json
+(он создается вручную в приложении, где миграция)
+
+открываем Visual Studio Code , устанавливаем рест клиент, создаем файл .http
+и пишим в них запросы
+GET http://locaalhost:8000/demo/
+(запросы отделяются ### в начале строки)
+#    path('demo/', GameView.as_view()), - нужно зарегистрировать
+# и импоритировать данный класс
+
+class GameView(APIView): # наследуется от APIView - нужно импортироать
+    def get(self, requst): #метод get, который примнимает request
+        weapons = Wearpon.objects.all()
+        ser = WeaponSerializer(weapons, many=True)
+        return Response(ser.data)
+    def post(self, request): # метод post
+        return Response({'status': 'Ok'})
+
+---узнать индификатор оружия , который поместили в таблицу
+# для отображения оружия
+class WeaponView(RetrieveAPIView): # наследем и нужно его импортировать
+    queryset = Wearpon.objects.all()  # для него требуется указать откуда
+    serializer_class = WeaponSerializer #Через что отображать
+в urls прописать
+path('weapon/<pk>/', WeaponView.as_view()),
+]
+# где pk = ключ
+
+для того чтобы получать номер оружия нужно в setializator добавить поле id
+fields = ['id', 'power', 'rerety'] # список свойств для отображения
+        #добавили поле id для получения информации о номере оружия
+
