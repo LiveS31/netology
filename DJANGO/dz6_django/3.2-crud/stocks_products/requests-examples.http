@@ -1,47 +1,47 @@
-POST  http://127.0.0.1:8000/demo/
+# примеры API-запросов
 
-###
-GET http://127.0.0.1:8000/demo/
+@baseUrl = http://localhost:8000/api/v1
 
-###
-
-GET http://127.0.0.1:8000/weapon/
-
-###ok
-
+# создание продукта
 POST http://localhost:8000/api/v1/products/
 Content-Type: application/json
 
 {
-  "title": "Пом11идор",
+  "title": "Помидор",
   "description": "Лучшие помидоры на рынке"
 }
-###ok
+
+###
+
+# получение продуктов
 GET http://localhost:8000/api/v1/products/
 Content-Type: application/json
 
-###ok
+###
 
-
-PATCH http://localhost:8000/api/v1/products/2/
+# обновление продукта
+PATCH http://localhost:8000/api/v1/products/1/
 Content-Type: application/json
 
 {
-  "description": "Сам!е сочные и ароматные помидорки"
+  "description": "Самые сочные и ароматные помидорки"
 }
-###ok
-# удаление продукта
 
-DELETE http://localhost:8000/api/v1/products/2/
+###
+
+# удаление продукта
+DELETE http://localhost:8000/api/v1/products/1/
 Content-Type: application/json
 
-###ok
+###
+
 # поиск продуктов по названию и описанию
 GET http://localhost:8000/api/v1/products/?search=помидор
 Content-Type: application/json
 
 ###
-# создание склада ok
+
+# создание склада
 POST http://localhost:8000/api/v1/stocks/
 Content-Type: application/json
 
@@ -49,12 +49,12 @@ Content-Type: application/json
   "address": "мой адрес не дом и не улица, мой адрес сегодня такой: www.ленинград-спб.ru3",
   "positions": [
     {
-      "product": 4,
+      "product": 2,
       "quantity": 250,
       "price": 120.50
     },
     {
-      "product": 4,
+      "product": 3,
       "quantity": 100,
       "price": 180
     }
@@ -62,8 +62,28 @@ Content-Type: application/json
 }
 
 ###
+
+# обновляем записи на складе
+PATCH http://localhost:8000/api/v1/stocks/4/
+Content-Type: application/json
+
+{
+  "positions": [
+    {
+      "product": 2,
+      "quantity": 100,
+      "price": 130.80
+    },
+    {
+      "product": 3,
+      "quantity": 243,
+      "price": 145
+    }
+  ]
+}
+
 ###
 
 # поиск складов, где есть определенный продукт
-GET http://localhost:8000/api/v1/stocks/?products=4
+GET http://localhost:8000/api/v1/stocks/?products=2
 Content-Type: application/json

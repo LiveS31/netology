@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="a6202489-9ec6-4eb9-baea-f8c1d2ee61be" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../DJANGO/ViewSetRout/ViewSetRout/ViewSetRout/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DJANGO/ViewSetRout/ViewSetRout/ViewSetRout/asgi.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DJANGO/ViewSetRout/ViewSetRout/ViewSetRout/settings.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DJANGO/ViewSetRout/ViewSetRout/ViewSetRout/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DJANGO/ViewSetRout/ViewSetRout/ViewSetRout/wsgi.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DJANGO/ViewSetRout/ViewSetRout/db.sqlite3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DJANGO/ViewSetRout/ViewSetRout/manage.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DJANGO/ViewSetRout/ViewSetRout/vr/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DJANGO/ViewSetRout/ViewSetRout/vr/admin.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DJANGO/ViewSetRout/ViewSetRout/vr/apps.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DJANGO/ViewSetRout/ViewSetRout/vr/migrations/0001_initial.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DJANGO/ViewSetRout/ViewSetRout/vr/migrations/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DJANGO/ViewSetRout/ViewSetRout/vr/models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DJANGO/ViewSetRout/ViewSetRout/vr/serializers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DJANGO/ViewSetRout/ViewSetRout/vr/tests.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DJANGO/ViewSetRout/ViewSetRout/vr/views.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DJANGO/dz6_django/3.2-crud/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DJANGO/dz6_django/3.2-crud/stocks_products/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DJANGO/dz6_django/3.2-crud/stocks_products/logistic/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DJANGO/dz6_django/3.2-crud/stocks_products/logistic/admin.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DJANGO/dz6_django/3.2-crud/stocks_products/logistic/apps.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DJANGO/dz6_django/3.2-crud/stocks_products/logistic/migrations/0001_initial.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DJANGO/dz6_django/3.2-crud/stocks_products/logistic/migrations/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DJANGO/dz6_django/3.2-crud/stocks_products/logistic/models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DJANGO/dz6_django/3.2-crud/stocks_products/logistic/serializers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DJANGO/dz6_django/3.2-crud/stocks_products/logistic/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DJANGO/dz6_django/3.2-crud/stocks_products/logistic/views.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DJANGO/dz6_django/3.2-crud/stocks_products/manage.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DJANGO/dz6_django/3.2-crud/stocks_products/requests-examples.http" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DJANGO/dz6_django/3.2-crud/stocks_products/requirements.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DJANGO/dz6_django/3.2-crud/stocks_products/stocks_products/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DJANGO/dz6_django/3.2-crud/stocks_products/stocks_products/asgi.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DJANGO/dz6_django/3.2-crud/stocks_products/stocks_products/settings.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DJANGO/dz6_django/3.2-crud/stocks_products/stocks_products/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../DJANGO/dz6_django/3.2-crud/stocks_products/stocks_products/wsgi.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DJANGO/konsp.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../DJANGO/konsp.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DJANGO/request.http" beforeDir="false" afterPath="$PROJECT_DIR$/../DJANGO/request.http" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2R0TSz9hyjI6hqUwq2qx5N4k2Z0" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "/home/lives/Документы/уроки/netology/base_data"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a6202489-9ec6-4eb9-baea-f8c1d2ee61be" name="Changes" comment="" />
+      <created>1686386002969</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1686386002969</updated>
+    </task>
+    <servers />
+  </component>
+</project>

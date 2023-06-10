@@ -514,10 +514,6 @@ GET http://locaalhost:8000/demo/
 #    path('demo/', GameView.as_view()), - нужно зарегистрировать
 # и импоритировать данный класс
 
-class GameView(APIView): # наследуется от APIView - нужно импортироать
-    def get(self, requst): #метод get, который примнимает request
-        weapons = Wearpon.objects.all()
-        ser = WeaponSerializer(weapons, many=True)
         return Response(ser.data)
     def post(self, request): # метод post
         return Response({'status': 'Ok'})
@@ -535,4 +531,172 @@ path('weapon/<pk>/', WeaponView.as_view()),
 для того чтобы получать номер оружия нужно в setializator добавить поле id
 fields = ['id', 'power', 'rerety'] # список свойств для отображения
         #добавили поле id для получения информации о номере оружия
+
+---- ViewSet и роутеры
+создаем поект для кометариев на сайте
+создадим сайт с коентариями для пльзователей
+для этого в файле models.py создаем таблицу
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete.CASCADE) - таблица с внешним ключем , и удаоением все о пользователе , если будет удален пользователь
+    text = models.TextField()- колонка для коментария без ограниечения по длинне
+    created_at = models.DataTime(auto_now_add=True) - создает коментарии по дяте создания в колонке
+
+через shell - входим в таблицу
+from vr.models import Comment
+
+резистрируем пользовател который остави коментарии
+from django.contrib.auth.models import User
+ u = User.objects.first()
+
+ заполняем теблицу
+ c = Comment(user=u, text='demo text')
+ выполним сохранрение
+ c.save()
+
+
+ views.py
+ VewsSet - позволяет описать всех обработчиков
+ иполтируем его
+ from rest_framework.viewset import ViewSet
+ from rest_framework.response import Response
+# Create your views here.
+from rest_framework.viewsets import ViewSet
+
+# создадим класс ViewSet
+class CommentViewSet(ViewSet):
+    def list(self, request): # позволяем вывести все объекты данноо ресурса
+        return Response({'status':'Ok'})
+
+    #если хотим смотреть какой-то конкретный объект
+    def retrieve(self, request):
+        pass
+
+    #для удаления обекта
+    def destroy(self, request):
+        pass
+    # для обновления
+    def update(self, request):
+        pass
+    # для создания
+    def create(self, request):
+        pass
+
+но есть более простой способ
+ в файле views
+class ComentViewSet(ModelViewSet):
+    queryset = Comment.objects.all() # откуда берем данные
+    serializer_class = CommentSerializer
+    #создаем файл serializers
+
+в файле serializers
+from rest_framework import serializers
+from .models import Comment
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment # модель это таблица Comment
+        #Коментарии которые будут отображаться
+        frields = ['id', 'user', 'text', 'created_at']
+ ROUTER - специальный класс который умеер регистрировать маршруты для ViewSet
+переходим в urls.py
+from django.contrib import admin
+from django.urls import path
+
+from vr.views import CommentViewSet
+from rest_framework.routers import DefaultRouter
+r = DefaultRouter()
+r.register('comments', CommentViewSet)
+urlpatterns = [
+    path('admin/', admin.site.urls),
+]+r.urls
+
+
+запросы
+get http://localhost:8000/comments/ - это запрос на вывод
+
+POST http://localhost:8000/comments/
+для работы требуется json
+Content-Type: application/json
+
+{
+    'user':1,
+    'text':'text new text'
+}
+
+-  в таблицу будет добавлена запись id:3, user:1 , text: text new text
+
+меняем текст в объекте запроса
+PATH http://locaalhost:8000/comments/2/
+
+Content-Type: application/json
+{
+    'text':'neff'
+}
+
+DELETE http://localhost:8000/comments/2/  (2- это индификатор, котороый нужно удалить)
+
+
+Сериализаторы, валидация и обновление данных
+
+   # если нужно, чтобы не было каких либо слов(например запрщнных)
+
+    def validate_text(self, value):  #_text - поле которое нужно проверить
+        if 'text' in value:
+            raise ValidationError('Вы использовали заперщенное слово')
+#если слово text встречается в value, то вывесли ошибку на экран
+        return value
+
+#если нужно несколько полей, то нужно использовать
+    def validate(self, attrs):
+        if 'hello' in attrs['text'] or attrs['user'].id == 1:
+            raise ValidationError('Что -то не так')
+        return attrs #возвращаем если все ок
+
+
+    #serializers - создание и обновление объектов
+
+    def create(self, validated_data):
+        print(validated_data)
+        return super().create(validated_data)
+
+-- фильтрация
+нужно установть библиотеку pip install django_filte
+после установки необходимо подключить в settings -> installed_apps 'django_filters'
+в том же файле нужно настроить фильтры
+REST_FRAMEWORK ={
+#по умолчанию нужно настроить фильтры (поумолжанию уже три фильтра включены:
+    'DEFAULT_FILTER_BACKENDS':[
+    'django_filters.rest_framework.DjangoFilterBackend',
+    ],
+     'SEARCH_PARAM': 'q',
+    # q становиться = search - можно использовать q
+}
+
+class CommentViewSet(ModelViewSet):
+    queryset = Comment.objects.all() # откуда берем данные
+    serializer_class = CommentSerializer
+    #создаем файл serializers
+    #чтобы настроить фильтрацию
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ['user', ]
+    search_fields = ['text',]   #поиск по полям текст
+    # (можем делать поиск по коментариям в поле текст)
+# как искать
+#GET http://localhost:8000/omments/?seach=text
+    #третий тип фильтра - отвечает за упорядовачивание
+ordering_fieds = ['id', 'user', 'text', 'created_at'] #вводим список
+# параметров которые необходимо порядочить. в данномсписке рперечисляются те поля
+# по которым можно фильравать
+# чтобы сделать запрос
+#GET http://localhost:8000/omments/?q=text&ordering=id
+# это значит упорядочить по id/ (если нужно в обратном порядке -id)
+# если нужно по вум параметрам id, text
+
+--- пагинация в коде
+в файле settings.py добавить еще один параметр   'DEFAULT_FILTER_BACKENDS'= [
+     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination'
+     данный класс позволят делать фильтрацию по страница. Нужно определитьс сколько будет объектов на странице
+     для этого добовляем там же 'PAGE_SIZE':3 (три элемента на странице)
+
+#GET http://localhost:8000/omments/?page=1
+
 
