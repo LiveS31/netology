@@ -699,4 +699,56 @@ ordering_fieds = ['id', 'user', 'text', 'created_at'] #вводим список
 
 #GET http://localhost:8000/omments/?page=1
 
+---авторизаци в DRF
+
+1 . звходи в moduls.py и создаем таблицы
+from django.contrib.auth.models import User #Импортируем пользователя
+
+from django.db import models
+
+
+class Adv(models.Model):# создаем таблицу
+    #создаем пользователя USER и импортируем его
+    user = models.ForeignKey(User, on_delete=models.CASCADE)#создаем правило удаления
+#пользователя каскадно - это обязательное условие
+
+    #создаем текст
+    text = models.TextField()
+
+    # Создаем время создания записи если его не прописали
+    created_at = models.DateTimeField(auto_now_add=True)# время создастся автоматичеси
+    # если его не указать
+
+    #поумолчанию состояние обЪявлеия будет открытым
+    open = models.BooleanField(default=True)
+созадем миграции и применяем их
+
+2. views.py
+
+from django.shortcuts import render
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.throttling import AnonRateThrottle
+from rest_framework.viewsets import ModelViewSet #импортируем
+
+from .models import Adv
+from .permissions import IsOwnerOrReadOnly
+from .serializers import AdvSerializer
+
+
+class AdvViewSet(ModelViewSet):#наследуем от ModelViewSet
+    queryset = Adv.objects.all() #берет данные их модели AVD
+    serializer_class = AdvSerializer #описываем serialiser_class
+создаем файл serializers и описываем в нем определения
+from rest_framework import serializers
+
+from .models import Adv
+
+
+class AdvSerializer(serializers.ModelSerializer):
+    #создаем class serializers и наследуем его от serializers
+    class Meta: # создаем класс мета
+        model = Adv # основываемся на модели Avd
+        #перечислим все поля которые нужно отбражать ввиде джейсона
+        fields = ['id', 'user', 'text', 'created_at', 'open']
+переходим в urls.py - создаем роутеры
 

@@ -19,10 +19,11 @@ from rest_framework.routers import DefaultRouter
 
 from demo.views import AdvViewSet
 
+#from .views import AdvViewSet
+
 r = DefaultRouter()
-r.register('adv', AdvViewSet) #регистрируем view avd
-# по маршруте set будет AdvViewset
+r.register('adv', AdvViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-] + r.urls #r.urls - добавляем к нашим маршрутам
+] + r.urls

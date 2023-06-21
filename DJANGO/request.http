@@ -68,4 +68,4 @@ Content-Type: application/json
 GET http://localhost:8000/api/v1/stocks/?products=4
 Content-Type: application/json
 ###
-GET http://localhost:8000/
+GET http://localhost:8000/localhost:8000/localhost:8000/adv/
