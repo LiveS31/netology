@@ -68,4 +68,39 @@ Content-Type: application/json
 GET http://localhost:8000/api/v1/stocks/?products=4
 Content-Type: application/json
 ###
-GET http://localhost:8000/localhost:8000/localhost:8000/adv/
+GET http://localhost:8000/adv/
+
+###
+
+POST http://localhost:8000/adv/
+Content-Type: application/json
+
+{
+  "user": 2,
+  "text": "Объявление"
+}
+
+###
+
+POST http://localhost:8000/adv/
+Content-Type: application/json
+Authorization: Token 1f8d170656cdac5e6bc76a52d3c2abcc6e7142a3
+
+{
+  "text": "йОбъявление"
+}
+###
+
+DELETE http://localhost:8000/adv/1/
+
+###
+@baseUrl = https://localhost:8000/api
+# получение объявлений
+GET http://localhost:8000/api/advertisements/
+Content-Type: application/json
+Authorization: Token 309866013bc2587df3fe9daba416f479a826a5c9
+
+{
+  "title": "Шкаф IKEA",
+  "description": "Срочно"
+}

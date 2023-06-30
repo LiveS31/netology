@@ -5,4 +5,5 @@ from application.gt import trans
 if __name__ == '__main__':
     calculate_salary()
     get_emloyees()
-    trans(input("Введите текст для перевода:"),input("Введите язык. по умолчанию -ru:"))
+    trans(input("Введите текст для перевода:"),
+          input("Введите язык. по умолчанию -ru:"))

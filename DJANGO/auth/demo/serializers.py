@@ -9,4 +9,5 @@ class AdvSerializer(serializers.ModelSerializer):
         model = Adv # основываемся на модели Avd
         #перечислим все поля которые нужно отбражать ввиде джейсона
         fields = ['id', 'user', 'text', 'created_at', 'open']
+#read_only_fields - значит поле разрешено только для чтения
         read_only_fields = ['user',]

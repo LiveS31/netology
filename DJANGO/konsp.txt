@@ -700,8 +700,9 @@ ordering_fieds = ['id', 'user', 'text', 'created_at'] #вводим список
 #GET http://localhost:8000/omments/?page=1
 
 ---авторизаци в DRF
+AUCH - смотреть
 
-1 . звходи в moduls.py и создаем таблицы
+1 . завходи в models.py и создаем таблицы
 from django.contrib.auth.models import User #Импортируем пользователя
 
 from django.db import models
@@ -751,4 +752,103 @@ class AdvSerializer(serializers.ModelSerializer):
         #перечислим все поля которые нужно отбражать ввиде джейсона
         fields = ['id', 'user', 'text', 'created_at', 'open']
 переходим в urls.py - создаем роутеры
+
+from django.contrib import admin
+from django.urls import path
+from rest_framework.routers import DefaultRouter
+
+from demo.views import AdvViewSet
+
+#from .views import AdvViewSet
+
+r = DefaultRouter()  #создание роутера + его нужно импортировать
+r.register('adv', AdvViewSet) #Регистрируем и не забываем ипортировать.
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+] + r.urls #добовляем все маршруты
+
+создаем суперпользователя
+
+--- Заполняем таблицу:
+POST http://localhost:8000/adv/
+Content-Type: application/json
+
+{
+    'user':1
+    'text': 'Объявление'
+}
+
+
+теперь делаем выбор пользователя по токену.
+для этого переходим setting.py
+
+INSTALL APP
+и добовляем два фраемфорка
+# для заполнения по токену нужно добавить для токена
+    'rest_framework', # - стандартный fraemwork
+    'rest_framework.authtoken',# - отвечает за аутофикацию по токеку
+    # добовляет в базу модели которые будут хранить соответствие между
+    # пользователем и токеным. т.е. - пользовател будет автоматичесий
+    # по токену, а не id
+после этих действй ыполняем миграции
+
+теперь требуется настроить процесс аутофикации
+Для этого все в том же файле:
+настраиваем процесс аутофикации
+REST_FRAMEWORK = { #создаем настройку рестфраемфорк
+    'DEFAULT_AUTHENTICATION_CLASSES': [ # данный паметр отвечает
+        # за выбранный механизм аутофикации.
+        # Спаисок из доступных параметров аутофикации
+
+        #так как у нас индификация по токену - выберем нужный
+        'rest_framework.authentication.TokenAuthentication', #аутофикация по токену
+    ],
+    # есть три вида аутофикации
+    #bacik - используется для тестирования
+    #sessionns - использует стандартные сессии из django
+
+требуется переопределить арторизацию по запросам на токен
+для этого переходим в файл views.py
+
+#переопределям методы создания объекта
+    def perform_create(self, serializer):# есть разные функции для разных действий
+    #в данном примере вызываем сохранение данных в базу по аутофикации пользователя
+    #делаем в нем запрос корректного юзера
+    #user=self.request.user
+        serializer.save(user=self.request.user)
+
+модернизируем сериалайзер
+для этого в файле serializer.py
+#read_only_fields - значит поле разрешено только для чтения(добавить в таблицу)
+        read_only_fields = ['user',]
+
+если попробовать удалить - (DELETE http://localhost:8000/adv/1/)
+не получися! так как не авторизрован пользователь кто удаляет объявление
+
+эта настройка делается в views.py
+permission_classes = [IsOwnerOrReadOnly] #задаем значение,
+    # что удалить может только тот кто написао объявления
+именно такой настройки нет - требуется сделать самостоятельно
+для этого создаем - permissions.py
+from rest_framework.permissions import BasePermission
+#любой пермишен наследуется от базового класса
+
+class IsOwnerOrReadOnly(BasePermission):# создаем свой класс
+
+    # создаем первую функцию - имеет ли пользователь право
+    # на работу с ресурсом в целом.
+    #def has_permission(self, request, view):#по-умолчанию значение
+        # True (имеет). Но нужен другой
+    def has_object_permission(self, request, view, obj):# проверяет права
+        # на конкретный объект
+# чтобы действие на чтение былол доступно любому пользователю
+        # нужно добавить следующий функционал
+        if request.method == 'GET':# если действие запроса
+            return True # всегда возвращать True
+        return request.user == obj.user# возвращаем статус (True) совпадает
+        # или нет пользователь сообщения с пользователем из запроса
+
+
+
 

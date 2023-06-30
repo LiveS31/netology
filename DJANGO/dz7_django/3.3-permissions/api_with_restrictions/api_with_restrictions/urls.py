@@ -1,7 +1,7 @@
-"""auth URL Configuration
+"""api_with_restrictions URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/3.2/topics/http/urls/
+    https://docs.djangoproject.com/en/3.1/topics/http/urls/
 Examples:
 Function views
     1. Add an import:  from my_app import views
@@ -14,16 +14,16 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+
 from rest_framework.routers import DefaultRouter
-
-from demo.views import AdvViewSet
-
-#from .views import AdvViewSet
-
-r = DefaultRouter()  #создание роутера + его нужно импортировать
-r.register('adv', AdvViewSet) #Регистрируем и не забываем ипортировать.
+from .views import AdvertisementViewSet
+#по какой то волшебной причине - подчеркивает красным
+router = DefaultRouter()
+# TODO: подключите `AdvertisementViewSet`
+router.register('advertisements', AdvertisementViewSet)
 
 urlpatterns = [
+    path('api/', include(router.urls)), # роутинг
     path('admin/', admin.site.urls),
-] + r.urls #добовляем все маршруты
+]
