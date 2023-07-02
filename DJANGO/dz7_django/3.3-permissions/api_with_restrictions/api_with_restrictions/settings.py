@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -37,12 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-# для заполнения по токену нужно добавить для токена
-    'rest_framework',# - стандартный fraemwork
-    'rest_framework.authtoken',# - отвечает за аутофикацию по токеку
-    # добовляет в базу модели которые будут хранить соответствие между
-    # пользователем и токеным. т.е. - пользовател будет автоматичесий
-    # по токену, а не id
+
+    'rest_framework',
+    'rest_framework.authtoken',
     'django_filters',
 
     'advertisements',
@@ -83,19 +80,20 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
     ],
+
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 5,
     'DEFAULT_THROTTLE_CLASSES': [
-        # какие механизмы запросов включены
-       # 'rest_framework.throttling.UserRateThrottle', #пользователь
-        #'rest_framework.throttling.AnonRateThrottle', #аноним
+        # 'rest_framework.throttling.UserRateThrottle',
+        # 'rest_framework.throttling.AnonRateThrottle',
     ],
-    # Создаем ограничения запросов пользователя
     'DEFAULT_THROTTLE_RATES': {
         'user': '20/minute',
         'anon': '10/minute',
-    }
+    },
 }
+
+
 WSGI_APPLICATION = 'api_with_restrictions.wsgi.application'
 
 
@@ -113,7 +111,12 @@ DATABASES = {
     }
 }
 
-
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': 'db.sqlite3',
+#     }
+# }
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
@@ -136,7 +139,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
-LANGUAGE_CODE = 'ru-RU'
+LANGUAGE_CODE = 'ru-ru'
 
 TIME_ZONE = 'UTC'
 
@@ -151,14 +154,3 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-#Создаем процесс аутофикации
-# DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-#
-# #создаем фраемворк для аутофикации и фильтрации
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': [
-# #Выбраем аутофикацию по токену
-#         'rest_framework.authentication.TokenAuthentication',
-#     ],
-#  }
-# }
