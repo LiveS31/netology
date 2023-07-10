@@ -1,4 +1,4 @@
-"""api_with_restrictions URL Configuration
+"""django_testing URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.1/topics/http/urls/
@@ -15,18 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-
-
-
 from rest_framework.routers import DefaultRouter
 
-from advertisements.views import AdvertisementViewSet
+from students.views import CoursesViewSet
 
 router = DefaultRouter()
-router.register('advertisements', AdvertisementViewSet)
-
+router.register("courses", CoursesViewSet, basename="courses")
 
 urlpatterns = [
-    path('api/', include(router.urls)),
     path('admin/', admin.site.urls),
+    path("api/v1/", include(router.urls)),
 ]

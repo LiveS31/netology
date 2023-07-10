@@ -12,7 +12,7 @@ class AdvertisementStatusChoices(models.TextChoices):
 
 class Advertisement(models.Model):
     """Объявление."""
-
+# создаем таблицу
     title = models.TextField()
     description = models.TextField(default='')
     status = models.TextField(
