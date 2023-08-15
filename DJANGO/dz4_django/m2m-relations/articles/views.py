@@ -17,5 +17,5 @@ def articles_list(request):
 
 #new add for cicd
 
-def test_page(requests):
+def test_page(request):
     return Response('hello my frend!!!')
