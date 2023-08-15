@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from rest_framework.response import Response
 from .models import Article
 
 
@@ -14,3 +14,8 @@ def articles_list(request):
 
 
     return render(request, template, context)
+
+#new add for cicd
+
+def test_page(requests):
+    return Response('hello my frend!!!')
