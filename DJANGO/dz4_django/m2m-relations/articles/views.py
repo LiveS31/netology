@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from rest_framework.response import Response
 from .models import Article
 
 
@@ -14,3 +14,6 @@ def articles_list(request):
 
 
     return render(request, template, context)
+
+def test_page(request):
+    return Response('hello my frend!!!')
