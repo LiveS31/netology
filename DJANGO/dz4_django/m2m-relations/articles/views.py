@@ -15,8 +15,4 @@ def articles_list(request):
 
     return render(request, template, context)
 
-#new add for cicd
 
-def test_page(request):
-    temp = 'hello my frend'
-    return render(request, temp)
