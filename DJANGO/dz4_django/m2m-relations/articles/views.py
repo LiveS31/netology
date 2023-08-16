@@ -18,4 +18,5 @@ def articles_list(request):
 #new add for cicd
 
 def test_page(request):
-    return Response('hello my frend!!!')
+    temp = 'hello my frend'
+    return render(request, temp)
