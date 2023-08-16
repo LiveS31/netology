@@ -15,5 +15,4 @@ def articles_list(request):
 
     return render(request, template, context)
 
-def test_page(request):
-    return Response('hello my frend!!!')
+

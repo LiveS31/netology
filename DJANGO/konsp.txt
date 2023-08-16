@@ -906,3 +906,44 @@ pip install pytest-cov
 onit=tests/* (пропускаем папку тест и все файлы в ней)
 #то что не нужно проверять
 чтобы запустить тест pytest --cov, --cov-report=html #последний это режим отчета
+
+инфа по разбору
+рекомендуеся загружать данны все в папку отдельную (сортировать)
+чтобы например загружать медиа - указвываем в файле modeols.py
+image = models.ImageFiled(null=True, blank=True, upload_to='posts/images')
+
+и в папке setting.py указать
+STATIC_URL = "/static/" - добавить вначале слешь так будет правильно
+STATIC_ROOT = BASE_DIR / "static" - где будет лежать папка
+MEDIA_URL ="/media/" - это будет означать, что все медиа будут попадать в данную папку
+MEDIA_ROOT = BASE_DIR / "media" - в корне проекта будет создана папка
+
+для корректной работы с медиа файлами нужно установить pillow
+pip install pillow
+
+
+author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='post')
+- related_name - все посты автора (user) пожгл получить по запросу post
+- при удалении пользователя удалить все данные связанные с например
+
+favorite_by = models.ManyToManyField(User, related_name='favorite_post')
+ManyToManyField- потому, что один пост модет быть добавлен ко многим пользователям и может быть избранным многими пользователя
+
+
+1- делается models.py
+2- делается views.py -> паралельно мы создаем файл serializer.py и заполняем его
+3- делается urls.py
+
+в файле views.py
+qweryset - с какими постами мы быдем работать
+
+в файле serializer.py
+class Meta:
+models = Post - с чем будем работать
+fields = ['id', 'text', 'image', 'author', 'created_at'] - с какими колонкам будем работать из таблици
+author = UserSerializer(read_only=True) - только чтение
+
+в файле urls.py
+
+
+
