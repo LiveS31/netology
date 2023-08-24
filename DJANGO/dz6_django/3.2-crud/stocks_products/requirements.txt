@@ -1,3 +1,15 @@
 django
 djangorestframework
 psycopg2-binary
+asgiref
+certifi
+charset-normalizer
+django-filter
+gunicorn
+idna
+python-dotenv
+pytz
+requests
+sqlparse
+typing_extensions
+urllib3
