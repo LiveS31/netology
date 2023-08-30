@@ -1,0 +1,52 @@
+version: '3.9'
+
+volumes:
+  pgdata:
+
+services:
+  python_app:
+    build: . #~/Документы/уроки/netology/DevOp/Doсkers/dz_2/3.2-crud/stocks_products/logistic
+    environment:
+      - MY_EMV=NETO
+    ports:
+      - "8238:6060"
+  web_crud:
+    build: .
+    ports:
+      - "8000:5000"
+  redis:
+    image: 'redis:alpine'
+  postgresdb:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./:docker-entrypoint-initdb.d
+      - ./log:/var/log
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_is ready -U postgres -d netology_stocks_products']
+      interval: 1m30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    env_file:
+      - .emv
+  pgadmin:
+    image: gpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT: "ponomarevsergej@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "postgres"
+      PGADMIN_LISTEN_PORT: 80
+      PGADMIN_DEFAULT_SERVICE_MODE: "False"
+    volumes:
+      - ./pgadmin:/var/lib/pgadmin
+    restart: unless-stopped
+    ports:
+      - "5050:80"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 2G

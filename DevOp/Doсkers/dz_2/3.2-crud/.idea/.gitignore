@@ -1,0 +1,5 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+/stocks_products/db.sqlite3
+/stocks_products/.emv

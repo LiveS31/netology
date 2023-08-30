@@ -1,0 +1,76 @@
+version: '3.9'
+volumes:
+  pgdata: #<создаем том по умолчанию>
+networks:
+  backend:
+  frontend:
+
+services:
+  python_app: #<подключаем приложение из пайтон>
+    build: /python<ауть к приложению>
+    environment: # <окружени>
+      - MY_ENV=NETOLOGY_24_07 #<переменная окруения>
+    networks:
+      - frontend #<приложения должны быть в одной сети>
+    ports: # <передаем порты>
+      - 8238:6060
+  web_app: #  <название приложение>
+    build: . #  <говорим собери из докер файла. И указываем путь откуда нужно собрать>
+    ports:  #  <указываем нужные порты для связи>
+      - 8000:5000
+    environment: # <чтобы можно было менять код в онлайне>
+      - FLACK_ENV=development # <переменное окружение>
+    volumes: # <подключить контейнер>
+      - .:/code # <пробросить в директорию контейнера>
+  redis: #  <это приложение, которое будет работать в контейнере>
+    image: 'redis:alpine' #  <облегченная версия приложения>
+#  Этот файл запустит два приложения наше и redis
+# делаем docker-compose up -d
+# должен быть dockerfile
+  postgresdb: # <описывем базу данных>
+    image: postgres:latest # <база данных последняя версия>
+    ports:
+      - 5555:5432
+    volumes: # <указываем тома>
+      - pgdata:/var/lib/postgresql/data #<подключаем том к data>
+      - ./:/docker-entrypoint-initdb.d # <чтобы все не вбивать руками>
+      - ./logs:/var/log # <перебрасываем логи>
+    restart: unless-stopped #<политека перезапуска базы данных>
+    networks:
+      - backend #< приложение должны быть в одной сети>
+    healthcheck: # <определение работает ли сервис>
+      test: ["CMD-SHELL", 'pg-isready -U -admin1 -d new_dm']
+# это для поскгрес
+      # `CMD-SHELL- где
+      # pg-isready <комаенда которая будет выпоняться>
+      #-U -admin1 <из под какого пользователя выполнить>
+      #-d new_dm <какую базу данных использовать>
+      interval: 1m30s # <время по которому проходит хеллчек>
+      timeout: 5s #<время ожидания ответа>
+      retries: 5 #повторять раз>
+      start_period: 30s #<через какое время после старта провериять>
+    env_file: #<для передачи данных из файла>
+      - .emv # <указываем название файла из которого передаем данные>
+# Создаем файл .emv
+      #POSTGRES_DB=new_db <название базы данных>
+      #POSTGRES_USER=admin1 <юзер>
+      #POSGRES_PASSWORD=admin1pwd <пароль>
+  pgadmin: #<управленние не через консоль>
+    image: dpage/pgadmin4:latest #<образ pgadmin>
+    environment: #<передаем переменное окружение>
+      PGADMIN_DEFAULT_EMAIL: "admin@yandex.ru"
+      PGADMIN_DEFAULT_PASSWORD: "admin1pwd"
+      PGADMIN_DEFAULT_SERVICE_MODE: "False"
+    volumes: #<для возможности просмотра логов>
+      - ./pgadmin:/var/lib/pgadmin #<путь где будут логи>
+    restart: unless-stopped #<политика перезагрузки>
+    ports:
+      - 5050:80 # <порты 5050 - у себя, 80 - стандартный для pg>
+    deploy: # <когда запускается контейнер и превращается в сервис>
+      resources: #<указываем ресурсы для лимитов>
+        limits:
+          cpus: '0.5' #<для cpu>
+          memory: 2G #<для оперативной памяти>
+#запрос в базу данных
+#curl -X POST -H 'Content-Type: applicacion/json' -d '{"name": "Vasilii"}' localhost:8228/greetings
+
