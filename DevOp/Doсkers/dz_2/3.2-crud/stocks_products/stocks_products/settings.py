@@ -83,7 +83,7 @@ DATABASES = {
         #'NAME': 'crud',
         #"HOST" : 'postgres',
         #'HOST': '127.0.0.1',
-        'HOST': os.getenv('DB_HOST', 'localhost', '127.0.0.1'),
+        'HOST': os.getenv('DB_HOST', 'localhost'),
         'PORT': '5432',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
