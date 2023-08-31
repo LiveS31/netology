@@ -16,7 +16,7 @@ services:
   postgres:
     image: postgres:latest
     ports:
-     - 5432:5432
+     - 5000:5432
     env_file:
       - .env
     volumes:
