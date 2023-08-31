@@ -6,7 +6,7 @@ volumes:
 services:
   backend:
     env_file:
-      - .emv
+      - .env
     build: .
     command: gunicorn stocks_products.wsgi:application --bind 0.0.0.0:8000
     volumes:
@@ -18,7 +18,7 @@ services:
 #    ports:
 #      - 5555:5432
     env_file:
-      - .emv
+      - .env
     volumes:
       - pgdata:/var/lib/postgresql/data/
       - ./:/docker-entrypoint-initdb.d
