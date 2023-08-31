@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1b93b291-ec54-4c14-a6d7-9d4c96a6446a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../Doсkers/dz_2/3.2-crud/stocks_products/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Doсkers/dz_2/3.2-crud/stocks_products/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Doсkers/dz_2/3.2-crud/stocks_products/nginx.conf" beforeDir="false" afterPath="$PROJECT_DIR$/../Doсkers/dz_2/3.2-crud/stocks_products/nginx.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Doсkers/dz_2/3.2-crud/stocks_products/stocks_products/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Doсkers/dz_2/3.2-crud/stocks_products/stocks_products/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
