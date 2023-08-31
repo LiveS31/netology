@@ -1,3 +1,4 @@
 POSTGRES_DB=netology_stocks_products
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
+DB_HOST=postgres
