@@ -15,8 +15,8 @@ services:
       - postgres
   postgres:
     image: postgres:latest
-    ports:
-     - 5000:5432
+#    ports:
+#     - 5000:5432
     env_file:
       - .env
     volumes:
@@ -30,6 +30,6 @@ services:
     ports:
       - 8000:80
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./stocks_products/nginx/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
       - backend
