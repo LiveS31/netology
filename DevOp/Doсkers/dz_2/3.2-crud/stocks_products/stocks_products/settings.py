@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-nw^y+m^wmxza1asgk+)!ua2qx9)g+#v=6%76-9i8i(6eqiw94j
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -79,14 +79,14 @@ WSGI_APPLICATION = 'stocks_products.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'netology_stocks_products',
+        'NAME': os.getenv('POSTGRES_DB'),
         #'NAME': 'crud',
         #"HOST" : 'postgres',
         #'HOST': '127.0.0.1',
-        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'HOST': os.getenv('DB_HOST',  'localhost'),
         'PORT': '5432',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
+        'USER': os.getenv('POSTGRES_USER'),
+        'PASSWORD': os.getenv ('POSTGRES_PASSWORD'),
     }
 }
 
@@ -143,9 +143,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK ={
-    'DEFAULT_FILTER_BACKENDS': [
-        'django_filters.rest_framework.DjangoFilterBackend',
-],
+#     'DEFAULT_FILTER_BACKENDS': [
+#         'django_filters.rest_framework.DjangoFilterBackend',
+# ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 3
 }

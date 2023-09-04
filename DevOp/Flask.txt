@@ -20,4 +20,7 @@ DELETE - Удалить запись из базы
 uri (query string) - возможность передавать ксловари в запросе)
 body -
 headers -
-cookie
+cookie -
+ Запуск приложеия FLASK
+ gunicorn -b 0.0.0.0:5000 app(модуль в котором содержится приложеие):app(название переменной) --capture-output
+pip install pydantic - применяется для установки валидации
