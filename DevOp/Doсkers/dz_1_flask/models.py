@@ -63,7 +63,6 @@ class Announcement(Base):
     description = Column(String, nullable=False) # отбъявлениб при отсутствии создать столбец как NOT NULL
     owner = Column(ForeignKey('app_users.id', ondelete='CASCADE'))
 #создаем связь 'owner' с таблицей 'app_users.id' и каскадным удалением
-    #create_time = Column(DateTime, default=func.now()) #убрать
 #(записываем, создаем таблици
 
 
