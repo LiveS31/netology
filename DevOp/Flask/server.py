@@ -6,6 +6,7 @@ from models import User, Session # импортируем из models
 from schema import CreateUser, UpdateUser
 from sqlalchemy.exc import IntegrityError #исключение
 import json
+
 app = Flask('app') # запускаем приложение flask
 SALT = 'jkdsbsdkelfjnwkbvsdjfsd' #ее можно добавлять к паролю
 
@@ -30,7 +31,7 @@ def validate(json_data, schema): # делаем функцию валидаци�
 def error_handler(er: HttpError): #создаем функцию получение ошибки
     http_response = jsonify({'status': 'error', 'message': er.message})
     http_response.status_code = er.status_code
-
+    return http_response #?
 
 
 def hash_password(password:str): #создаем для шифровки пароля
@@ -107,7 +108,7 @@ class UsersView(MethodView): # Работа с пользователями
             'status': "success"
         })
 
-user_view = UsersView.as_view('users')  # преобразуем класс во вью и привяжим к методам
+user_view = UsersView.as_view('users')  # преобразуем класс во вью и привяжем к методам
 app.add_url_rule('/users/<int:users_id>',
                  view_func=user_view,
                  methods=["GET", "PATH", 'DELETE']) #url с id

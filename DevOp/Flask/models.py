@@ -7,7 +7,7 @@ from sqlalchemy.orm import sessionmaker #Для создания сессий
 from sqlalchemy.ext.declarative import declarative_base # базовый класс для создания функций
 
 
-PG_USER = os.getenv('PG_USER', 'app')
+PG_USER = os.getenv('PG_USER', 'user')
 PG_PASSWORD = os.getenv('PG_PASSWORD', '1234')
 PG_DB = os.getenv('PG_DB', 'app')
 PG_HOST = os.getenv('PG_HOST', '127.0.0.1')
