@@ -1,12 +1,12 @@
-version: '3.9'
+version: '3.9' #версия докера
 
 services:
 # создаем базу данных с пользователями
   db:
-    image: postgres:14.3-alpine3.15
+    image: postgres:14.3-alpine3.15 #имидж
     ports:
-      - "5431:5432"
-    environment:
+      - "5431:5432" # порт
+    environment: #данные базы data
       POSTGRES_USER: ${PG_USER}
       POSTGRES_PASSWORD: ${PG_PASSWORD}
       POSTGRES_DB: ${PG_DB}
