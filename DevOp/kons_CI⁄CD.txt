@@ -1,0 +1,288 @@
+CI/CD - интеграция и неприрывное изменение на сервер
+
+для этого (начинаем с "0")
+
+    1. Создаем сервер
+    2. Подключаемся к нему через ssh
+    3. Создаем пользователя/ делаем его админом/ переключаемся на него/ заходим корневой каталог
+    4. Обновляем и устанавливаем нужные пакеты
+(sudo apt install python3-venv python3-pip postgresql nginx expect)
+    5. Создае базу данных
+    sudo su postgres
+    psql
+    ALTER USER posrtgres WITH PASSWORD '123456';
+    CREATE DATABASE cicd;
+    выходи \q
+    exit
+    6. Скачиваем проект (из gitA)
+    git clone <адрес проекта>
++
+настраиваем CI/CD
+пояснени
+    a. production - финальная версия из основной ветки
+    b. stage - промежуточная версия для QA и бизнес-тестов
+    c. develop - сырая версия из ветки с разработкой
+
+Будем использовать GitHub Actions
+прицнцип работы:
+    1.Создаем репозиторий в GitHub
+    2.Отправляем на проверку исходный код (с валидными тестами и линтерами)
+    3.Настроить CI на GitHub для запуска проверк, чтобы убедиться, что тесты проходят и линтер не ругается
+    4.Создать Doker-образ для публикации приложения
+    5.Развернить Doker-образ на сервере
+создаем в репозитории нудную дополнительную ветку <в данном случае ci >
+git pull origin main <персия ветки> +
+git checkout -b ci <переключение на ветку> +
+git pull origin ci <копирование с ветки на ветку> +
+git branch <смотрим ветки>+
+создаем виртуальное окружение
+python3 -m venv env <создаем виртуальную среду>+
+source env/bin/activate <активируем виртуальную среду>+
+pip install -r requirements.txt <скачиваем требуемые пакеты>+
+pip freeze <проверяем, что установилось>+
+sudo nano settings.py <делаем настройки файла settings.py - вводим переменные, которые создадим в файле .env >
+nano .env <создаем файл, где будут переменные для подмены (пароли, явки....)>
+python3 manage.py migrate <мигрируем в новую базу данных> +
+<если миграция прошла>
+python3 manage.py runsever 0.0.0.0:8000 <запускаем сервер - должно все открыться>
+
+    Настраиваем nginx
+sudo systemctl start nginx <запускаем nginx>
+sudo systemctl status ngnx <проверяем состояние>
+    Настраиаем gunicorn
+sudo nano /etc/systemd/system/gunicorn.sevice <создаем файл>
+заполняем файл:
+    [Unit]
+    Description=Gunicorn service <пишем что хочется>
+    After=network.target <запускать посте сети>
+
+    [Service]
+    User=sergey <пользователь>
+    WorkingDirectory=/home/sergey/netology/DJANGO/dz4_django/m2m-relations <где находится проэкт>
+    ExecStart=/home/sergey/netology/DJANGO/m2m-relations/env/bin/gunicorn <путь до Gunicorn>
+--workers 3<указываем количество копий> --bind unix:/home/sergey/netology/DJANGO/m2m-relations/project.sock <указываем куда делать bind. путь куда бует подключаться nginx> ?stocks_pprogect?.wsgi:application <к какой папке будет подключаться nginx>
+
+    [Install]
+    WantedBy=multi-user.target
+
+sudo systemctl start gunicorn <запускаем gunicorn>
+sudo systemctl enable gunicorn <разрешаем автозагрузку>
+sudo systemctl status gunikorn <проверяем статут. должно быть running>
+(елси нужно перезагрузить gunicorn:
+sudo systemctl daemon-reload
+sudo systemctl restart gunicorn)
+
+    Настраиаем nginx
+sudo nano /etc/ngnix/sites-availabe/project <создаем файл для настройки nginx- будут параметры>
+    server {
+    listen 80; <какой порт слушать>
+    sever_name IPадрес  <ip адрес сервера>
+    }
+    location /static/ {
+     root /home/sergey/netology/DJANGO/dz4_django/m2m-relations; <путь где будет находиться папка static>
+    }
+    locacion / {
+         include proxy_params;
+         proxy_pass http://unix:/home/sergey/netology/DJANGO/dz4_django/m2m-relations/website/project.sock; <указываем путь, где лежит файл sock>}
+подключаем сайт
+sudo ln -s /etc/nginx/sites-availabe/project /etc/nginx/sites-enabled/ <создаем ссылку для запуска>
+sudo systemctl restart nginx
+Открыаем settings.py на редактирование.
+    находим настройку STATIC_URL. И под ней нужно добавить страку
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static') -нитри BASE_DIR буден находиться папка с названием static. она будет находиться в одной папке с manage.py
+python3 manage.py collectstatic <подключем статику>
+если сайт не запустится, попробовать следующее
+    sudo nano /etc/nginx/nginx.conf
+    в этом файле изменить user на root или на своего пользователя
+_________________________
+
+Новая часть - как будет происходить внесение изменения в проэкт (Автоматизация)
+ 1. Захом в проэкт котрый нужен на на github
+    делаем в нем нужное изменение на нудной ветку
+    пушим его на github
+    (писать как в идеале без дополнительных точек и путей)
+ 2. Заходим на сервер
+    переходим в папку проэкта
+    git pull origin ci <делаем скачиваем обновления изменения нужной ветки\>
+    sudo systemctl restart gunicorn <перезапусакем gunicorn>
+ 3. Применяем GitHubActions:
+        jobs - перечень задач, сборка(build), тестирование(tests)
+        branches - перечень веток, по действию в которох следует запускать интеграцию
+        steps - последовательность действий для интеграции
+         * командой users можно использовать уже заготовленные скрипты
+         * командой name и run можно создавать новые скрипты, задав имя и указав, что нужно выполнить
+    в корне проекта создаем папку .github в ней же создаем папку workflows в ней создаем файл с расширением .yml . в данном файле пишем:
+    name: Django CICD <название действия - значения не имеет>
+
+    on:               <включение выполнения>
+     push:   <на какие действия запускать>
+        branches: [ci] <к какой ветке применяется [ci - это ветка]>
+
+    jobs: <- пишем что будем делать и когда>
+        django_tests: <вместо   django_tests: - это название процссов. оно может быть любым>
+        runs-on: ubuntu 22.02 <указываем на какой системе ему нужно все развертывать (в данном случае на ubuntu>
+        env: <задаем переменное окружение>
+          SEKRET_KEY: 'lcmefljcbjKNLJNfdvkdsjvfndvlafwiucniNFJNDJFNoijfemf' <какое то значение>
+          DEBUG: '0' <TRUE ИЛИ FALSE (0 или 1)>
+          ALLOWED_HOST: hocalhost, 127.0.0.1 <какой адрес будет неизвестно, поэтому пишем так>
+          .......
+
+ !!!!но так делать не правильно потому что они в отрытом доступе!!!!
+ заходим в github -> settings -> security -> secrets and variables -> actions
+ нажимаем на вкладку new repository secret:
+    name <указываем имя. оно может быть любым>
+    Secret <значение может быть любое. Указываем для всех секретных данных. каждое в обдельно "файле">
+    !знаечение настройки бызы данных должно быть - django.db.baskends.postgresql
+для того, чтобы получить переменные в проекте делаются следующие действия в окружении:
+    evn:
+    SECRET_KEY: ${{ secrets.НАЗВАНИЕ КЛЮЧА КОТОРЫЙ УКАЗАЛИ }}
+    DEBUG: '0' <TRUE ИЛИ FALSE (0 или 1)>
+    ALLOWED_HOST: ${{ secrets.НАЗВАНИЕ КЛЮЧА КОТОРЫЙ УКАЗАЛИ }}
+    DB_ENGINE: ${{ secrets.НАЗВАНИЕ КЛЮЧА КОТОРЫЙ УКАЗАЛИ }}
+    DB_NAME: ${{ secrets.НАЗВАНИЕ КЛЮЧА КОТОРЫЙ УКАЗАЛИ }}
+    DB_USER: ${{ secrets.НАЗВАНИЕ КЛЮЧА КОТОРЫЙ УКАЗАЛИ }}
+    DB_PASSWORD: ${{ secrets.НАЗВАНИЕ КЛЮЧА КОТОРЫЙ УКАЗАЛИ }}
+    DB_HOST: ${{ secrets.НАЗВАНИЕ КЛЮЧА КОТОРЫЙ УКАЗАЛИ }}
+    DB_PORT: ${{ secrets.НАЗВАНИЕ КЛЮЧА КОТОРЫЙ УКАЗАЛИ }}
+
+Так как в тесте нужен postgres - его нужно подключить как срвис.
+ Для этого:
+    services:
+        posrtgres_name: <название может быть любое>
+        image: posrtgres:12 <что использовать и какую версию>
+            env: <задаем окружение>
+            POSTGRES_DB ${{ env.DB_NAME }} <названия фиксированы и окружение берем уже из вешеуказанного окружения>
+            POSTGRES_USER: ${{ env.DB_USER }}
+            POSTGRES_PASSWORD: ${{ env.DB_PASSWORD }}
+        port:
+            - 5432: 5432
+        options: <нужно для того, чтобы posrtgres успевал загрузиться>
+         -- health-cmd pg_isready
+         -- health-interval 5s
+         -- health-timeout 5s
+         -- health-retries 5
+
+        steps: <описываем шаги действий. они описываются элементами списка>
+          - name: Проверка наличия изменений <задаем название проверки>
+            uses: actions/checkout@v3 <автор guthub actions v3>
+
+          - name: Установка python и окружения
+            uses: actions/setup-python@v3 <автор github>
+
+          - name: Обновляем pip - без этого у меня не работает
+            run: pip install --upgrade pip
+
+          - name: Установка зависимостей
+            run: pip.install -r requirements.txt <run - указывается если действия нужно написать самостоятельно>
+
+          - name: Литинг когда  <он проверяет код на соответствие написанию кода>
+          (типов их много устанавливем на КОМПЬЮТЕР flake8
+          Используется так: flake8 название папки ил файла для проверки/
+          если при проверке нужно что то игнорировать - fake8 имя_папки --exclude_имя папки_проверки/имя папки которую игнорировать)
+            run: flake8 logistic --exclude logistic/migrations/
+
+          - name: тестирование кода
+            run: python manage.py test <запускаем тестирование django иногда требуетя указать путь>
+            <тестироваение python- run: pytest>
+            env: <настраеваем окружение из проекта беря его из окружения проека (выше  файле)>
+                SECRET_KEY: ${{ env.НАЗВАНИЕ КЛЮЧА КОТОРЫЙ УКАЗАЛИ }}
+                DEBUG: '0' <TRUE ИЛИ FALSE (0 или 1)>
+                ALLOWED_HOST: ${{ env.НАЗВАНИЕ КЛЮЧА КОТОРЫЙ УКАЗАЛИ }}
+                DB_ENGINE: ${{ env.НАЗВАНИЕ КЛЮЧА КОТОРЫЙ УКАЗАЛИ }}
+                DB_NAME: ${{ env.НАЗВАНИЕ КЛЮЧА КОТОРЫЙ УКАЗАЛИ }}
+                DB_USER: ${{ env.НАЗВАНИЕ КЛЮЧА КОТОРЫЙ УКАЗАЛИ }}
+                DB_PASSWORD: ${{ env.НАЗВАНИЕ КЛЮЧА КОТОРЫЙ УКАЗАЛИ }}
+                DB_HOST: ${{ env.НАЗВАНИЕ КЛЮЧА КОТОРЫЙ УКАЗАЛИ }}
+                DB_PORT: ${{ env.НАЗВАНИЕ КЛЮЧА КОТОРЫЙ УКАЗАЛИ }}
+
+___
+    как запускать и применять тесты
+1. пишем тест
+ для этого создаем в директории файл tets.py
+ from unittest import TestCase
+ from rest_framework.test import APIClient
+
+ class TestView(TestCase):
+    def test_response(self):
+        url = '/test/' <адрес где смотреть>
+        client = APIClient() <его нужно импортировать>
+        response = client.get(url) <делаем запрос по адресу>
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, 'должны получить свой текст')
+запускаем тест: python manage.py test
+при удачном тесте - отправляем результат на github
+
+2. Если тетс пройден успешно - отправляем все на сервер
+   Для этого используется скрипт (можно свой можно готовый)
+   продолжаем файл с раширением .yml
+   - name: <назваение скрипта>
+     uses: appleboy/ssh-action@master <готовый скрипт предназнаечен для работы с веткой мастер>
+     with:
+       host: host_ip <ip хоста на котором ысе крутится "лучше через SECRET">
+       username: пользователь <лучше через SECRET>
+       password: пароль <лучше через SECRET>
+       script: | <так как команд будет много. пишем их списком>
+        - cd home/crud/
+        - git pull origin ci
+        - source evn/bin/activate
+        - python manage.py migrate
+        - deactivate
+        - sudo systemctl restart gunicorn
+(но с сожалению нельзя отсюда ввести пароль, который будет тебовать сервер! И по этому!!!)
+переходим на сервер:
+    1. Авторизуемся на сервере.
+    2. Переходим в папку проекта
+    3. пишем Bash -скрипт
+nano deploy.sh <название любое, расширение всегда для скрипта .sh>
+#!/bin/bash <это значит, что это скрит linux. Они так всегда начинаются>
+cd /home/sergey/crud <переходим в папку проекта>
+git pull origin ci <скачиваем из репозитория и нужно ветки изменения >
+source env/bin/activate <активируем окружения>
+python manage.py migrate <делаем миграцию (если быдет работа с базами)>
+deactivate <делаем деактивацию виртуально окружения>
+sudo systemctl restart gunicorn <перезапускаем gunicorn>
+
+команды будут выполняться построчно. сохраняем и выходим
+    для ввода пароя автматически создаем новый файл (по тому же пути): nano deploy.exp (расширение только .exp - название может быть любое). Зполняем файл:
+
+#!/bin/bash/expect
+spawm /home/sergey/crud/deploy.sh <запуск файла. указывать полный путь до файла!!!>
+expect "password" <дословно: Если при выполнении встретится слово/фраза... >
+send -- "1\r" <отправь 1. \r - имитирует нажатие enter. можно это сделать через файл>
+expect eof
+сохраняем и выходим
+
+        Для того чтобы запускать этот  файт нужно текущиму пользователю дать права на исполнения:
+sudo chmod +x deploy.sh <даем права на выполнения модуля>
+sudo chmod +x deploy.exp <даем права на выполнения модуля>
+
+    4. Для запуска:
+    expect deploy.expect
+
+    5. В пайчарме пишем эту коматду с полным путем
+    - name: <назваение скрипта>
+     uses: appleboy/ssh-action@master <готовый скрипт предназнаечен для работы с веткой мастер>
+     with:
+       host: host_ip <ip хоста на котором ысе крутится "лучше через SECRET">
+       username: пользователь <лучше через SECRET>
+       password: пароль <лучше через SECRET>
+       script: expect /home/sergey/crud/deploy.exp <прописываем полный путь до файла на сервере>
+
+
+если не применяется удаленно (на сервере pull)
+Сделать stash
+Если вы не знаете, что такое stash, то stash это как стек, временное хранилище
+Чтобы спрятать изменения, то есть сделать stash выполните:
+1. git stash
+Затем примите изменения из удалённого репозитория (git pull).
+А затем верните свои изменения из stash:
+2. git stash pop
+Ну а если стек спрятанных изменений вам вовсе не нужен, то его удалить можно следующей командой:
+3. git stash drop
+
+
+
+
+
+
+
