@@ -11,7 +11,6 @@ from sqlalchemy_utils import EmailType, UUIDType
 #UUIDType - генератор
 
 #принимаем параметры для базы данных
-
 PG_USER = os.getenv('PG_USER', 'user')
 PG_PASSWORD = os.getenv('PG_PASSWORD','12345')
 PG_DB = os.getenv('PG_DB','app')

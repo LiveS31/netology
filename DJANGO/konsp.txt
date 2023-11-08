@@ -27,7 +27,7 @@ Quit the server with CONTROL-C.
 КЛАССИЧЕСКИЙ СЕРВЕР И РОИТИНГ
 для создания приложения нужно
 python3 manage.py startapp demo
-lдля запускаприложения:
+для запускаприложения:
 python3 manage.py - обязательно
 startapp - команда
 demo - название приложения
@@ -124,7 +124,7 @@ on_delete=models.CASCADE- что сделать если такой записи
 заегистрировать приложение ( это стандартно)
 + в терминале прописать python manage.py makemigrations
 (после этого появится еще один файл в папке миграция
-после выполнениея команды нужно приминить миграцию командой:  python manage.py migrate
+после выполнениея команды нужно приминить миграцию командой:  python3 manage.py migrate
 после этого так же создается и база данных
 настройки ее можено посмотреть в файле settings.py DATABASES
 
@@ -135,7 +135,7 @@ on_delete=models.CASCADE- что сделать если такой записи
    NAME: 'demoorm'
    USER: 'postgres'
    PASSWORD: 'postgres'
-4. повторить миграцию   python manage.py migrate
+4. повторить миграцию   python3 manage.py migrate
 
 Заметки в базу данных:
 открываем файл views.py
