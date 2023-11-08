@@ -9,14 +9,14 @@
 
 Если требуется создать базу данных:
 - выполнить файл base.py
-  (по умолчанию используется sqlite и заменить данные в файле settings.py)
+  (и заменить данные в файле settings.py. по умолчанию используется sqlite )
 
 Чтобы запустить сервер:
 - pip install -r requirements.txt (желательно в виртуальной среде) 
 - python manage.py migrate
-- python3 manage.py makemigrations
+- python manage.py makemigrations
   Добавить суперпользователя:
-  python3 manage.py createsuperuser:
+  python manage.py createsuperuser:
   email: admin@admin.com
   password: admin
 - python manage.py runserver
